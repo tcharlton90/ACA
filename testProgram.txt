@@ -1,5 +1,5 @@
-# add all numbers up to 50, i.e. 1+2+3+4+...49+50;
-# answer should be 1275 (10011111011);
+/* add all numbers up to 50, i.e. 1+2+3+4+...49+50;
+answer should be 1275 (10011111011) */
 
 		MOV r0 #0
 		MOV r1 #1
@@ -8,3 +8,5 @@ loop	ADD r0 r1
 		CMP r1 #51
 		BLT loop
 		END
+
+

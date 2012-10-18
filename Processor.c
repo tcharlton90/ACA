@@ -13,6 +13,16 @@ int main (void)
 {
 	char * tick = malloc(sizeof(char));
 	int clock = 0;
+
+	printf("Starting up\n");
+	init();
+	initFetch();
+	printf("Started Fetch\n");
+	initDecode();
+	printf("Started Decode\n");
+	initExecute();
+	printf("Started Execute\n");
+	printf("Started Up\n");
 	while (1)
 	{
 		scanf("%c", tick);
@@ -21,13 +31,10 @@ int main (void)
 		{
 			break;
 		}
-		printf("Starting up\n");
-		initFetch();
-		printf("Started Fetch\n");
-		initDecode();
-		printf("Started Decode\n");
-		initExecute();
-		printf("Started Execute\n");
+
+		fetch();
+		decode();
+		execute();
 		printf("Finished clock cycle number %d\n\n", clock++);
 	}
 	return 0;

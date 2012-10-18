@@ -1,0 +1,31 @@
+31   2827    2423    2019    1615     1211    87       43      0
+|      |       |       |       |       |       |       |       |
+ opcode|   Rd  |  Rop1 |                operand2               |    Mathmatical operation
+ opcode|   Rop |                        operand1               |    Data processing
+ opcode|
+
+
+
+
+
+
+
+
+
+
+
+0000	ADD dest op1 op2
+0001	SUB dest op1 op2
+0010	MUL dest op1 op2
+0011	DIV dest op1 op2
+0100	CMP op1 #
+0101	MOV reg #
+0110	LDR reg op1
+0111	STR reg op1
+1000	B dest
+1001	BLT dest
+1010	BE dest
+1011	BGT dest
+1100	JMP dest
+1101	RTN
+1110	END
