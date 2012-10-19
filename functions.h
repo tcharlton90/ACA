@@ -13,7 +13,7 @@ void execute(void);
 void init(void);
 
 typedef struct POP{
-	int opcode;
+	char * opcode;
 	int reg1;
 	int op1;
 	int op2;

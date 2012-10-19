@@ -1,16 +1,8 @@
 31   2827    2423    2019    1615     1211    87       43      0
 |      |       |       |       |       |       |       |       |
- opcode|   Rd  |  Rop1 |                operand2               |    Mathmatical operation
- opcode|   Rop |                        operand1               |    Data processing
+ opcode|   Rd  |  Rop1 |                operand2               |    Mathmatical operation ( ADD, SUB, DIV, MUL)
+ opcode|   Rop |                        operand1               |    Data processing (CMP, MOV)
  opcode|
-
-
-
-
-
-
-
-
 
 
 
