@@ -16,6 +16,7 @@ int main (void)
 
 	printf("Starting up\n");
 	init();
+	testinit();
 	initFetch();
 	printf("Started Fetch\n");
 	initDecode();
