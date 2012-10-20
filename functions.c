@@ -5,30 +5,54 @@
 
 FILE * program;
 struct POP * head, *temp;
+struct registers registerBlock;
 
-void initFetch(void)
-{
-	printf("Initiating fetch unit\n");
-}
+char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT","BE","BGT","JMP","RTN","END"};
 
-void initDecode(void)
-{
-	printf("Initiating Decode Unit\n");	
-}
+//-----------------------------//
+//
+// Pipeline stage results
+struct POP * fetchedInstruction;
+//struct POP * decodedI
+//
+//
+//
+//
+//
+//
+//
+//-----------------------------//
 
-void initExecute(void)
-{
-	printf("Initiating Execute Unit\n");
-}
+
+
 
 void fetch(void)
 {
+	int success = 1;
 	printf("Fetching\n");
+	temp = head;
+	while (temp->instructionAddress != registerBlock.PC)
+	{
+		if (temp->next == NULL)
+		{
+			success = 0;
+			printf("Cannot fetch instruction\n");
+			break;
+		}
+		temp = temp->next;
+	}
+	fetchedInstruction = temp;
+	registerBlock.PC++;
+	//printf("fetched instruction number %d\n", registerBlock.PC);
 }
 
 void decode(void)
 {
+	char* endptr;
+	char * name;
 	printf("Decoding\n");
+	name = operation[strtol(fetchedInstruction->opcode, &endptr, 2)];
+	//printf("%s\n", name);
 }
 
 void execute(void)
@@ -48,6 +72,10 @@ void init(void)
 	struct POP *tail;
 	char* endptr;
 
+	//set registers to 0
+	memset(registerBlock.reg,0,NUMREGISTERS);
+	registerBlock.PC = 1;
+	//open program and create instruction buffer
 	program = fopen("testProgramMC.txt","r+");
 	head = malloc(sizeof(struct POP));
 	tail = head;
@@ -82,7 +110,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "ADD";
+			temp -> opcode = "0000";
 
 			temp -> instructionAddress = instNum++; 
 
@@ -116,7 +144,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "SUB";
+			temp -> opcode = "0001";
 
 			temp -> instructionAddress = instNum++;
 
@@ -150,7 +178,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "MUL";
+			temp -> opcode = "0010";
 
 			temp -> instructionAddress = instNum++;
 			
@@ -184,7 +212,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "DIV";
+			temp -> opcode = "0011";
 
 			temp -> instructionAddress = instNum++;
 			
@@ -218,7 +246,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 			
-			temp -> opcode = "CMP";
+			temp -> opcode = "0100";
 
 			temp -> instructionAddress = instNum++;
 			
@@ -248,7 +276,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "MOV";
+			temp -> opcode = "0101";
 
 			temp -> instructionAddress = instNum++;
 			
@@ -284,7 +312,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "B";
+			temp -> opcode = "1000";
 
 			temp -> instructionAddress = instNum++;
 
@@ -297,7 +325,7 @@ void init(void)
 			strncpy(twozerobitop, operand+4, 20);
 			op = strtol(twozerobitop, &endptr, 2);
 			temp -> Maddress = op;
-			printf("Maddress op: %d\n", op);
+			//printf("Maddress op: %d\n", op);
 
 			temp -> next = NULL;
 
@@ -311,7 +339,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "BLT";
+			temp -> opcode = "1001";
 
 			temp -> instructionAddress = instNum++;
 
@@ -324,7 +352,7 @@ void init(void)
 			strncpy(twozerobitop, operand+4, 20);
 			op = strtol(twozerobitop, &endptr, 2);
 			temp -> Maddress = op;
-			printf("Maddress op: %d\n", op);
+			//printf("Maddress op: %d\n", op);
 
 			temp -> next = NULL;
 
@@ -338,7 +366,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "BE";
+			temp -> opcode = "1010";
 
 			temp -> instructionAddress = instNum++;
 
@@ -364,7 +392,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "BGT";
+			temp -> opcode = "1011";
 
 			temp -> instructionAddress = instNum++;
 
@@ -390,7 +418,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "JMP";
+			temp -> opcode = "1100";
 
 			temp -> instructionAddress = instNum++;
 
@@ -416,7 +444,7 @@ void init(void)
 
 			temp = malloc(sizeof(struct POP));
 
-			temp -> opcode = "RTN";
+			temp -> opcode = "1101";
 
 			temp -> instructionAddress = instNum++;
 
@@ -438,8 +466,27 @@ void init(void)
 			//printf("%d\n",temp->Maddress);
 		} else if (!strncmp(operand, "1110", 4))
 		{
-			printf("END OF PROGRAM\n");
+			printf("...program loaded.\n");
 			fclose(program);
+
+			temp = malloc(sizeof(struct POP));
+			
+			temp -> opcode = "1110";
+
+			temp -> instructionAddress = instNum++;
+			
+			temp -> reg1 = 0;
+
+			temp -> op1 = 0;
+			
+			temp -> op2 = 0;
+
+			temp -> Maddress = 0;
+
+			temp -> next = NULL;
+
+			tail->next = temp;
+			tail = temp;
 			break;
 		}
 	}
@@ -483,9 +530,4 @@ void testinit(void)
 		}
 		temp = temp -> next;
 	}
-}
-
-int convertToDec ( int bin)
-{
-
 }

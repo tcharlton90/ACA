@@ -1,8 +1,4 @@
-void initFetch(void);
-
-void initDecode(void);
-
-void initExecute(void);
+#define NUMREGISTERS 16
 
 void fetch(void);
 
@@ -23,3 +19,9 @@ typedef struct POP{
 	int Maddress;
 	struct POP *next;
 } POP;
+
+struct registers {
+		int PC;
+		int LR;
+		int reg[NUMREGISTERS];
+};

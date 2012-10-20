@@ -4,26 +4,16 @@
 
 // TODO change read-in hack to strcmp
 
-struct registers {
-		int PC;
-		int reg[16];
-};
-
 int main (void)
 {
 	char * tick = malloc(sizeof(char));
-	int clock = 0;
+	int clock = 1;
 
 	printf("Starting up\n");
 	init();
 	testinit();
-	initFetch();
-	printf("Started Fetch\n");
-	initDecode();
-	printf("Started Decode\n");
-	initExecute();
-	printf("Started Execute\n");
 	printf("Started Up\n");
+
 	while (1)
 	{
 		scanf("%c", tick);
