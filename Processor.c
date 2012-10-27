@@ -11,7 +11,7 @@ int main (void)
 
 	printf("Starting up\n");
 	init();
-	testinit();
+	
 	printf("Started Up\n");
 
 	while (1)
@@ -26,6 +26,7 @@ int main (void)
 		fetch();
 		decode();
 		execute();
+		//testinit();
 		printf("Finished clock cycle number %d\n\n", clock++);
 	}
 	return 0;

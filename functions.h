@@ -1,3 +1,5 @@
+#include "stdbool.h"
+
 #define NUMREGISTERS 16
 
 void fetch(void);
@@ -24,4 +26,16 @@ struct registers {
 		int PC;
 		int LR;
 		int reg[NUMREGISTERS];
+		int scoreBoard[NUMREGISTERS];
+		bool FLAG_E;
+		bool FLAG_LT;
+		bool FLAG_GT;
 };
+
+typedef struct bitStream{
+	int address;
+	char instruction[32];
+	struct bitStream *next;
+} bitStream;
+
+
