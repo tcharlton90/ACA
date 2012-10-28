@@ -27,6 +27,7 @@ int main (void)
 		decode();
 		execute();
 		//testinit();
+		test();
 		printf("Finished clock cycle number %d\n\n", clock++);
 	}
 	return 0;

@@ -12,6 +12,8 @@ void init(void);
 
 void testinit(void);
 
+void test(void);
+
 typedef struct POP{
 	int instructionAddress;
 	char * opcode;

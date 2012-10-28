@@ -79,8 +79,8 @@ void decode(void)
 		op = strtol(fourbitop, &endptr, 2);
 		temp -> op1 = op;
 
-		strncpy(twozerobitop,operand+12,20);
-		op = strtol(twozerobitop, &endptr, 2);
+		strncpy(fourbitop,operand+12,4);
+		op = strtol(fourbitop, &endptr, 2);
 		temp -> op2 = op;
 
 		temp -> Maddress = 0;
@@ -113,8 +113,8 @@ void decode(void)
 		op = strtol(fourbitop, &endptr, 2);
 		temp -> op1 = op;
 
-		strncpy(twozerobitop,operand+12,20);
-		op = strtol(twozerobitop, &endptr, 2);
+		strncpy(fourbitop,operand+12,4);
+		op = strtol(fourbitop, &endptr, 2);
 		temp -> op2 = op;
 
 		temp -> Maddress = 0;
@@ -147,8 +147,8 @@ void decode(void)
 		op = strtol(fourbitop, &endptr, 2);
 		temp -> op1 = op;
 
-		strncpy(twozerobitop,operand+12,20);
-		op = strtol(twozerobitop, &endptr, 2);
+		strncpy(fourbitop,operand+12,4);
+		op = strtol(fourbitop, &endptr, 2);
 		temp -> op2 = op;
 
 		temp -> Maddress = 0;
@@ -181,8 +181,8 @@ void decode(void)
 		op = strtol(fourbitop, &endptr, 2);
 		temp -> op1 = op;
 
-		strncpy(twozerobitop,operand+12,20);
-		op = strtol(twozerobitop, &endptr, 2);
+		strncpy(fourbitop,operand+12,4);
+		op = strtol(fourbitop, &endptr, 2);
 		temp -> op2 = op;
 
 		temp -> Maddress = 0;
@@ -465,9 +465,8 @@ void execute(void)
 	switch(atoi(decodedInstruction->opcode)){
 		case 0: //ADD
 			j = decodedInstruction->reg1;
-			l = decodedInstruction->op1;
-			i = registerBlock.reg[l];
-			k = decodedInstruction->op2;
+			i = registerBlock.reg[decodedInstruction->op1];
+			k = registerBlock.reg[decodedInstruction->op2];
 			registerBlock.reg[j] = i + k;
 			break;
 		case 1: //SUB
@@ -492,9 +491,10 @@ void execute(void)
 			registerBlock.reg[j] = i / k;
 			break;
 		case 100: //CMP
-			j = decodedInstruction->reg1;
-			l = registerBlock.reg[j];
+			l = decodedInstruction->reg1;
+			j = registerBlock.reg[l];
 			i = decodedInstruction->op1;
+			//printf ("%d cmp %d\n",j,i);
 			if (j > i)
 			{
 				registerBlock.FLAG_GT = true;
@@ -517,12 +517,36 @@ void execute(void)
 		case 111: //STR
 			break;
 		case 1000: //B
+			i = decodedInstruction->Maddress;
+			registerBlock.PC = i;
+			//printf("%d\n",i);
 			break;
 		case 1001: //BLT
+			i = decodedInstruction->Maddress;
+			if (registerBlock.FLAG_LT)
+			{
+				registerBlock.PC = i;
+				registerBlock.FLAG_LT = false;
+			}
+			//printf("%d\n",i);
 			break;
 		case 1010: //BE
+			i = decodedInstruction->Maddress;
+			if (registerBlock.FLAG_E)
+			{
+				registerBlock.PC = i;
+				registerBlock.FLAG_E = false;
+			}
+			//printf("%d\n",i);
 			break;
 		case 1011: //BGT
+			i = decodedInstruction->Maddress;
+			if (registerBlock.FLAG_GT)
+			{
+				registerBlock.PC = i;
+				registerBlock.FLAG_GT = false;
+			}
+			//printf("%d\n",i);
 			break;
 		case 1100: //JMP
 			break;
@@ -545,6 +569,9 @@ void init(void)
 	//set registers to 0
 	memset(registerBlock.reg,0,NUMREGISTERS);
 	registerBlock.PC = 1;
+	registerBlock.FLAG_LT = false;
+	registerBlock.FLAG_E = false;
+	registerBlock.FLAG_GT = false;
 
 	//open program and create instruction buffer
 	program = fopen("testProgramMC.txt","r+");
@@ -622,4 +649,17 @@ void testinit(void)
 		}
 		temp = temp -> next;
 	}
+}
+
+void test (void)
+{
+	int i;
+	int j = 0;
+	while (j < NUMREGISTERS)
+	{
+		i = registerBlock.reg[j];
+		printf("%d\n",i);
+		j++;
+	}
+	printf("| LT| E | GT|\n| %d | %d | %d |\n",registerBlock.FLAG_LT,registerBlock.FLAG_E,registerBlock.FLAG_GT);
 }
