@@ -1,6 +1,5 @@
 31   2827    2423    2019    1615     1211    87       43      0
 |      |       |       |       |       |       |       |       |
- opcode|   Rd  |  Rop1 |                operand2               |    literal Mathmatical operation 
  opcode|   Rd  |  Rop1 |  Rop2 |-------------------------------|    Mathematical operations ( ADD, SUB, DIV, MUL)
  opcode|   Rop |                        operand1               |    Data processing (CMP, MOV)
  opcode|   Rd  |       Maddress                        |-------|    Data movement (LDR, STR)
@@ -12,15 +11,15 @@
 0001	SUB dest reg1 reg2
 0010	MUL dest reg1 reg2
 0011	DIV dest reg1 reg2
-0100	CMP op1 #
-0101	MOV reg #
-0110	LDR reg op1
-0111	STR reg op1
-1000	B reg
-1001	BLT reg
-1010	BE reg
-1011	BGT reg
-1100	JMP reg
+0100	CMP reg1 #
+0101	MOV reg1 #
+0110	LDR reg1 op1
+0111	STR reg1 op1
+1000	B reg1
+1001	BLT reg1
+1010	BE reg1
+1011	BGT reg1
+1100	JMP reg1
 1101	RTN
 1110	END
 		CMPR
