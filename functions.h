@@ -41,3 +41,5 @@ typedef struct bitStream{
 } bitStream;
 
 
+struct registers registerBlock;
+
