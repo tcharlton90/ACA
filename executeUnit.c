@@ -38,14 +38,15 @@ void executeUnit ( POP *decodedInstruction )
 			l = decodedInstruction->reg1;
 			j = registerBlock.reg[l];
 			i = decodedInstruction->op1;
+			k = registerBlock.reg[i];
 			//printf ("%d cmp %d\n",j,i);
-			if (j > i)
+			if (j > k)
 			{
 				registerBlock.FLAG_GT = true;
-			} else if ( j == i)
+			} else if ( j == k)
 			{
 				registerBlock.FLAG_E = true;
-			} else if ( j < i)
+			} else if ( j < k)
 			{
 				registerBlock.FLAG_LT = true;
 			}

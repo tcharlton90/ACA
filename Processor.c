@@ -24,11 +24,13 @@ int main (void)
 		}
 
 		fetch();
+		printf("Clock cycle number %d\n\n", clock++);
 		decode();
+		printf("Clock cycle number %d\n\n", clock++);
 		execute();
 		//testinit();
-		test();
-		printf("Finished clock cycle number %d\n\n", clock++);
+		//test();
+		printf("Clock cycle number %d\n", clock++);
 	}
 	return 0;
 }
