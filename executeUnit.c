@@ -73,7 +73,12 @@ void executeUnit ( POP *decodedInstruction )
 			{
 				registerBlock.PC = i;
 				registerBlock.FLAG_LT = false;
+				//clearPipeline();
+			} else {
+				//branch prediction got it wrong
 				clearPipeline();
+				registerBlock.PC = decodedInstruction->instructionAddress+1;
+				registerBlock.FLAG_LT = false;
 			}
 			//printf("%d\n",i);
 			break;
@@ -102,6 +107,7 @@ void executeUnit ( POP *decodedInstruction )
 		case 1101: //RTN
 			break;
 		case 1110: //END
+			printf("-------------------------------------\n");
 			break;
 		default:
 			break;

@@ -3,7 +3,7 @@
  opcode|   Rd  |  Rop1 |  Rop2 |-------------------------------|    Mathematical operations ( ADD, SUB, DIV, MUL, CMP)
  opcode|   Rop |                        operand1               |    Data processing (MOV)
  opcode|   Rd  |       Maddress                        |-------|    Data movement (LDR, STR)
- opcode|   Rop |-----------------------------------------------|    Branch instructions (B, BLT, BE, BGT, JMP, RTN)
+ opcode|   Maddress                            |---------------|    Branch instructions (B, BLT, BE, BGT, JMP, RTN)
 
 
 

@@ -5,7 +5,7 @@
 
 POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 {
-	int op, instNum = 1;
+	int op, instructionNumber;
 	char twofourbitop[25];
 	char twozerobitop[21];
 	char fourbitop[5];
@@ -15,7 +15,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	printf("Decoding\n");
 
 	operand = fetchedInstruction->instruction;
-
+	instructionNumber = fetchedInstruction->address;
 	//printf("op: %s\n", operand);
 
 	if(!strncmp(operand, "0000", 4))
@@ -26,7 +26,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "0000";
 
-		temp -> instructionAddress = instNum++; 
+		temp -> instructionAddress = instructionNumber; 
 
 		strncpy(fourbitop,operand+4,4);
 		op = strtol(fourbitop, &endptr, 2);
@@ -50,7 +50,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		//printf("instNum: %d\n", temp -> instructionAddress);
 		//printf("reg1: %d\n",temp -> reg1);
 		//printf("op1: %d\n",temp -> op1);
-		//printf("op2: %d\n",temp -> op2);			
+		//printf("op2: %d\n",temp -> op2);
 
 	} else if (!strncmp(operand, "0001", 4))
 	{
@@ -60,7 +60,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "0001";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 
 		strncpy(fourbitop,operand+4,4);
 		op = strtol(fourbitop, &endptr, 2);
@@ -84,7 +84,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		//printf("instNum: %d\n", temp -> instructionAddress);
 		//printf("reg1: %d\n",temp -> reg1);
 		//printf("op1: %d\n",temp -> op1);
-		//printf("op2: %d\n",temp -> op2);			
+		//printf("op2: %d\n",temp -> op2)
 
 	} else if (!strncmp(operand, "0010", 4))
 	{
@@ -94,7 +94,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "0010";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 		
 		strncpy(fourbitop,operand+4,4);
 		op = strtol(fourbitop, &endptr, 2);
@@ -128,7 +128,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "0011";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 		
 		strncpy(fourbitop,operand+4,4);
 		op = strtol(fourbitop, &endptr, 2);
@@ -162,7 +162,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		
 		temp -> opcode = "0100";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 		
 		strncpy(fourbitop,operand+4,4);
 		op = strtol(fourbitop, &endptr, 2);
@@ -192,7 +192,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "0101";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 		
 		strncpy(fourbitop,operand+4,4);
 		op = strtol(fourbitop, &endptr, 2);
@@ -227,7 +227,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "1000";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 
 		temp -> reg1 = 0;
 
@@ -254,7 +254,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "1001";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 
 		temp -> reg1 = 0;
 
@@ -281,7 +281,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "1010";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 
 		temp -> reg1 = 0;
 
@@ -307,7 +307,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "1011";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 
 		temp -> reg1 = 0;
 
@@ -333,7 +333,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "1100";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 
 		temp -> reg1 = 0;
 
@@ -359,7 +359,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> opcode = "1101";
 
-		temp -> instructionAddress = instNum++;
+		temp -> instructionAddress = instructionNumber;
 
 		temp -> reg1 = 0;
 
@@ -383,13 +383,11 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		{
 			printf("Nothing to decode\n");
 		} else {
-			decodedEnd = 1;
-
 			temp = malloc(sizeof(struct POP));
 			
 			temp -> opcode = "1110";
 
-			temp -> instructionAddress = instNum++;
+			temp -> instructionAddress = instructionNumber;
 			
 			temp -> reg1 = 0;
 

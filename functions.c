@@ -3,6 +3,7 @@
 #include "string.h"
 #include "functions.h"
 #include "decodeUnit.h"
+#include "branch.h"
 
 FILE * program;
 struct POP * head, *temp, *tail;
@@ -26,7 +27,8 @@ struct POP * decodedInstruction, * nextDecodedInstruction;
 
 void fetch(void)
 {
-	int success = 1;
+	int success = 1, target = 0;
+	char Maddress[20];
 	printf("Fetching\n");
 	BStemp = BShead;
 	while ( BStemp->address != registerBlock.PC)
@@ -41,6 +43,21 @@ void fetch(void)
 		BStemp = BStemp -> next;
 	}
 	//printf("%d - %s\n",BStemp -> address, BStemp -> instruction);
+	
+	// If instruction is a branch
+	if (strncmp("10", BStemp->instruction, 2) == 0)
+	{
+	    //printf("BRANCHING\n");
+	    //printf("%s\n", BStemp->instruction+4);
+	    strncpy(Maddress, BStemp->instruction+4, 20);
+	    target = branchPredict(Maddress);
+	    if (target)
+	    {
+		success = 0;
+		registerBlock.PC = target;
+	    }
+	}
+	
 	nextFetchedInstruction = BStemp;
 	if (success){registerBlock.PC++;}
 	//printf("fetched instruction number %d\n", registerBlock.PC);
@@ -85,11 +102,11 @@ void clearPipeline(void)
 
 void init(void)
 {
-	int instNum = 1;
 	char * operand = malloc((sizeof(char)*32));
 	char * comment = malloc((sizeof(char)*256));
 	char * opcode;
-
+	
+	int instNum = 1;
 	//set registers to 0
 	memset(registerBlock.reg,0,NUMREGISTERS);
 	registerBlock.PC = 1;
@@ -133,6 +150,7 @@ void init(void)
 	 		break;
 	 	}
 	}
+	instNum = 1;
 }
 
 void testinit(void)
