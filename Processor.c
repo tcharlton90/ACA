@@ -15,9 +15,9 @@ int main (void)
 
 	while (1)
 	{
-		scanf("%c", tick);
+		//scanf("%c", tick);
 		//printf("%d\n", (int) * tick);
-		if ( (int) * tick == 120)
+		if (((int) * tick == 120) || finished)
 		{
 			break;
 		}

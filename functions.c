@@ -8,7 +8,7 @@
 FILE * program;
 struct POP * head, *temp, *tail;
 struct bitStream *BShead , *BStemp;
-int decodedEnd = 0, clock = 1;
+int decodedEnd = 0, clock = 1, instructionsExcecuted = 0;
 char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT","BE","BGT","JMP","RTN","END"};
 
 //-----------------------------//
@@ -82,6 +82,7 @@ void execute(void)
 	    printf("Executing %s\n", name);
 	    //printf("%d\n",atoi(decodedInstruction->opcode));
 	    executeUnit(decodedInstruction);
+	    instructionsExcecuted++;
 	} else {
 	    printf("Nothing to excecute\n");
 	}
@@ -107,6 +108,7 @@ void init(void)
 	char * opcode;
 	
 	int instNum = 1;
+	finished = 0;
 	//set registers to 0
 	memset(registerBlock.reg,0,NUMREGISTERS);
 	registerBlock.PC = 1;
@@ -204,4 +206,12 @@ void test (void)
 		j++;
 	}
 	printf("| LT| E | GT|\n| %d | %d | %d |\n",registerBlock.FLAG_LT,registerBlock.FLAG_E,registerBlock.FLAG_GT);
+}
+
+void stats(void)
+{
+    printf("Stats:\n");
+    printf("Instructions Excecuted:        %d\n", instructionsExcecuted);
+    printf("Clock Cycles:                  %d\n", clock);
+    printf("Clock Cycles per Instruction:  %e\n", (float)(instructionsExcecuted/clock));
 }

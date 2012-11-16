@@ -107,7 +107,9 @@ void executeUnit ( POP *decodedInstruction )
 		case 1101: //RTN
 			break;
 		case 1110: //END
-			printf("-------------------------------------\n");
+			//printf("-------------------------------------\n");
+			finished = 1;
+			stats();
 			break;
 		default:
 			break;

@@ -18,6 +18,8 @@ void testinit(void);
 
 void test(void);
 
+void stats(void);
+
 typedef struct POP{
 	int instructionAddress;
 	char * opcode;
@@ -47,3 +49,4 @@ typedef struct bitStream{
 
 struct registers registerBlock;
 
+int finished;
