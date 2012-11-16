@@ -213,5 +213,5 @@ void stats(void)
     printf("Stats:\n");
     printf("Instructions Excecuted:        %d\n", instructionsExcecuted);
     printf("Clock Cycles:                  %d\n", clock);
-    printf("Clock Cycles per Instruction:  %e\n", (float)(instructionsExcecuted/clock));
+    printf("Clock Cycles per Instruction:  %f\n", (float)(clock/instructionsExcecuted));
 }
