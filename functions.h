@@ -10,6 +10,8 @@ void execute(void);
 
 void cycleClock(void);
 
+void clearPipeline(void);
+
 void init(void);
 
 void testinit(void);

@@ -64,6 +64,7 @@ void executeUnit ( POP *decodedInstruction )
 		case 1000: //B
 			i = decodedInstruction->Maddress;
 			registerBlock.PC = i;
+			clearPipeline();
 			//printf("%d\n",i);
 			break;
 		case 1001: //BLT
@@ -72,6 +73,7 @@ void executeUnit ( POP *decodedInstruction )
 			{
 				registerBlock.PC = i;
 				registerBlock.FLAG_LT = false;
+				clearPipeline();
 			}
 			//printf("%d\n",i);
 			break;
@@ -81,6 +83,7 @@ void executeUnit ( POP *decodedInstruction )
 			{
 				registerBlock.PC = i;
 				registerBlock.FLAG_E = false;
+				clearPipeline();
 			}
 			//printf("%d\n",i);
 			break;
@@ -90,6 +93,7 @@ void executeUnit ( POP *decodedInstruction )
 			{
 				registerBlock.PC = i;
 				registerBlock.FLAG_GT = false;
+				clearPipeline();
 			}
 			//printf("%d\n",i);
 			break;

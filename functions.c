@@ -77,6 +77,12 @@ void cycleClock (void)
     printf("Clock cycle number %d\n", clock++);
 }
 
+void clearPipeline(void)
+{
+    nextFetchedInstruction = NULL;
+    nextDecodedInstruction = NULL;
+}
+
 void init(void)
 {
 	int instNum = 1;
