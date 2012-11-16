@@ -7,14 +7,14 @@
 FILE * program;
 struct POP * head, *temp, *tail;
 struct bitStream *BShead , *BStemp;
-int decodedEnd = 0;
+int decodedEnd = 0, clock = 1;
 char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT","BE","BGT","JMP","RTN","END"};
 
 //-----------------------------//
 //
 // Pipeline stage results
-struct bitStream * fetchedInstruction;
-struct POP * decodedInstruction;
+struct bitStream * fetchedInstruction, * nextFetchedInstruction;
+struct POP * decodedInstruction, * nextDecodedInstruction;
 //
 //
 //
@@ -41,24 +41,40 @@ void fetch(void)
 		BStemp = BStemp -> next;
 	}
 	//printf("%d - %s\n",BStemp -> address, BStemp -> instruction);
-	fetchedInstruction = BStemp;
+	nextFetchedInstruction = BStemp;
 	if (success){registerBlock.PC++;}
 	//printf("fetched instruction number %d\n", registerBlock.PC);
 }
 
 void decode(void)
 {
-	decodedInstruction = decodeUnit(fetchedInstruction, decodedEnd, tail);
+	if (fetchedInstruction)
+	{
+	    nextDecodedInstruction = decodeUnit(fetchedInstruction, decodedEnd, tail);
+	} else {
+	    printf("Nothing to Decode\n");
+	}
 }
 
 void execute(void)
 {
 	char * name, * endptr;
+	if (decodedInstruction)
+	{
+	    name = operation[strtol(decodedInstruction->opcode, &endptr, 2)];
+	    printf("Executing %s\n", name);
+	    //printf("%d\n",atoi(decodedInstruction->opcode));
+	    executeUnit(decodedInstruction);
+	} else {
+	    printf("Nothing to excecute\n");
+	}
+}
 
-	name = operation[strtol(decodedInstruction->opcode, &endptr, 2)];
-	printf("Executing %s\n", name);
-	//printf("%d\n",atoi(decodedInstruction->opcode));
-	executeUnit(decodedInstruction);
+void cycleClock (void)
+{
+    fetchedInstruction = nextFetchedInstruction;
+    decodedInstruction = nextDecodedInstruction;
+    printf("Clock cycle number %d\n", clock++);
 }
 
 void init(void)

@@ -7,7 +7,6 @@
 int main (void)
 {
 	char * tick = malloc(sizeof(char));
-	int clock = 1;
 
 	printf("Starting up\n");
 	init();
@@ -24,13 +23,11 @@ int main (void)
 		}
 
 		fetch();
-		printf("Clock cycle number %d\n\n", clock++);
 		decode();
-		printf("Clock cycle number %d\n\n", clock++);
 		execute();
+		cycleClock();
 		//testinit();
 		//test();
-		printf("Clock cycle number %d\n", clock++);
 	}
 	return 0;
 }

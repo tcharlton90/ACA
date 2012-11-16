@@ -8,6 +8,8 @@ void decode(void);
 
 void execute(void);
 
+void cycleClock(void);
+
 void init(void);
 
 void testinit(void);
