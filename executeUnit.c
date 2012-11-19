@@ -43,23 +43,32 @@ void executeUnit ( POP *decodedInstruction )
 			if (j > k)
 			{
 				registerBlock.FLAG_GT = true;
+				printf("%d,%d\n",j , k);
 			} else if ( j == k)
 			{
 				registerBlock.FLAG_E = true;
+				printf("%d,%d\n",j , k);
 			} else if ( j < k)
 			{
 				registerBlock.FLAG_LT = true;
+				printf("%d,%d\n",j , k);
 			}
 			break;
 		case 101: //MOV
-			//printf("moving %d to register %d\n", decodedInstruction->op1, decodedInstruction->reg1);
+			printf("moving %d to register %d\n", decodedInstruction->op1, decodedInstruction->reg1);
 			i = decodedInstruction->op1;
 			j = decodedInstruction->reg1;
 			registerBlock.reg[j] = i;
 			break;
 		case 110: //LDR
+			i = decodedInstruction->reg1;
+			j = decodedInstruction->Maddress;
+			registerBlock.reg[i] = memory[j];
 			break;
 		case 111: //STR
+			i = decodedInstruction->reg1;
+			j = decodedInstruction->Maddress;
+			registerBlock.reg[j] = memory[i];
 			break;
 		case 1000: //B
 			i = decodedInstruction->Maddress;
@@ -110,6 +119,7 @@ void executeUnit ( POP *decodedInstruction )
 			//printf("-------------------------------------\n");
 			finished = 1;
 			stats();
+			test();
 			break;
 		default:
 			break;

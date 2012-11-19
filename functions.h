@@ -1,6 +1,7 @@
 #include "stdbool.h"
 
 #define NUMREGISTERS 16
+#define MEMORYSIZE 4000
 
 void fetch(void);
 
@@ -50,3 +51,5 @@ typedef struct bitStream{
 struct registers registerBlock;
 
 int finished;
+
+int memory[MEMORYSIZE];

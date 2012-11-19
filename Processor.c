@@ -3,6 +3,11 @@
 #include "functions.h"
 
 // TODO change read-in hack to strcmp
+//	Branch prediction
+//	Super-scaler
+//	Register renaming unit
+//	Other features (Rob...)
+//	Hypothesis'
 
 int main (void)
 {

@@ -11,6 +11,7 @@ struct bitStream *BShead , *BStemp;
 int decodedEnd = 0, clock = 1, instructionsExcecuted = 0;
 char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT","BE","BGT","JMP","RTN","END"};
 
+
 //-----------------------------//
 //
 // Pipeline stage results
@@ -115,6 +116,9 @@ void init(void)
 	registerBlock.FLAG_LT = false;
 	registerBlock.FLAG_E = false;
 	registerBlock.FLAG_GT = false;
+	
+	//start Memory
+	memset(memory, 0,MEMORYSIZE);
 
 	//open program and create instruction buffer
 	program = fopen("testProgramMC.txt","r+");
@@ -210,8 +214,8 @@ void test (void)
 
 void stats(void)
 {
-    printf("Stats:\n");
+    printf("--------------------------\nStats:\n");
     printf("Instructions Excecuted:        %d\n", instructionsExcecuted);
     printf("Clock Cycles:                  %d\n", clock);
-    printf("Clock Cycles per Instruction:  %f\n", (float)(clock/instructionsExcecuted));
+    printf("Clock Cycles per Instruction:  %f\n--------------------------\n", ((float)clock/instructionsExcecuted));
 }

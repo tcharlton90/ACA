@@ -6,9 +6,9 @@
 POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 {
 	int op, instructionNumber;
-	char twofourbitop[25];
-	char twozerobitop[21];
-	char fourbitop[5];
+	char twofourbitop[24];
+	char twozerobitop[20];
+	char fourbitop[4];
 	char* endptr;
 	char * operand = malloc((sizeof(char)*32));
 	struct POP * decodedInstruction, *temp;
@@ -152,7 +152,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		//printf("instNum: %d\n", temp -> instructionAddress);
 		//printf("reg1: %d\n",temp -> reg1);
 		//printf("op1: %d\n",temp -> op1);
-		//printf("op2: %d\n",temp -> op2);			
+		//printf("op2: %d\n",temp -> op2);
 
 	} else if (!strncmp(operand, "0100", 4))
 	{
@@ -198,7 +198,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		op = strtol(fourbitop, &endptr, 2);
 		temp -> reg1 = op;
 
-		strncpy(twofourbitop,operand+8,24);
+		strncpy(twofourbitop,operand+8,(24*sizeof(char)));
 		op = strtol(twofourbitop, &endptr, 2);
 		temp -> op1 = op;
 		
@@ -210,15 +210,63 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		tail->next = temp;
 		tail = temp;
-		//printf("instNum: %d\n", temp -> instructionAddress);
-		//printf("%d\n",temp -> op1);
-		//printf("%d\n",temp->reg1);
+		printf("instNum: %d\n", temp -> instructionAddress);
+		printf("%d, %s, %d\n",temp -> op1, twofourbitop, sizeof(twofourbitop));
+		printf("%d\n",temp->reg1);
 	} else if (!strncmp(operand, "0110", 4))
 	{
 		//printf("found LDR\n");
+		// destination 4 -8 
+		//memory address 8 - 28
+		temp = malloc(sizeof(struct POP));
+
+		temp -> opcode = "0110";
+
+		temp -> instructionAddress = instructionNumber;
+		
+		strncpy(fourbitop,operand+4,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> reg1 = op;
+
+		temp -> op1 = 0;
+		
+		temp -> op2 = 0;
+		
+		strncpy(twozerobitop, operand+ 8,20);
+		op = strtol(twozerobitop, &endptr, 2);
+		temp -> Maddress = op;
+		
+		temp -> next = NULL;
+
+		tail->next = temp;
+		tail = temp;
+		
 	} else if (!strncmp(operand, "0111", 4))
 	{
 		//printf("found STR\n");
+		
+		temp = malloc(sizeof(struct POP));
+
+		temp -> opcode = "0111";
+
+		temp -> instructionAddress = instructionNumber;
+		
+		strncpy(fourbitop,operand+4,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> reg1 = op;
+
+		temp -> op1 = 0;
+		
+		temp -> op2 = 0;
+		
+		strncpy(twozerobitop, operand+ 8,20);
+		op = strtol(twozerobitop, &endptr, 2);
+		temp -> Maddress = op;
+		
+		temp -> next = NULL;
+
+		tail->next = temp;
+		tail = temp;
 	} else if (!strncmp(operand, "1000", 4))
 	{
 		//printf("found B\n");
