@@ -1,16 +1,19 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include "time.h"
 #include "string.h"
 #include "functions.h"
 #include "decodeUnit.h"
+#include "executeUnit.h"
 #include "branch.h"
 
 FILE * program;
 struct POP * head, *temp, *tail;
 struct bitStream *BShead , *BStemp;
-int decodedEnd = 0, clock = 1, instructionsExcecuted = 0;
+int decodedEnd = 0, procClock = 1, instructionsExcecuted = 0;
 char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT","BE","BGT","JMP","RTN","END"};
 
+struct timespec tim, tim2;
 
 //-----------------------------//
 //
@@ -30,15 +33,21 @@ void fetch(void)
 {
 	int success = 1, target = 0;
 	char Maddress[20];
-	printf("Fetching\n");
 	BStemp = BShead;
+	printf("                    ");
+	fflush(stdout);
+	tim.tv_sec = 0;
+	tim.tv_nsec = SPEED;
+	nanosleep(&tim , &tim2);
+	//printf("\r");
+	printf("\rFetching.. ");
 	while ( BStemp->address != registerBlock.PC)
 	{
 		//printf("%d\n", registerBlock.PC);
 		if (BStemp->next == NULL)
 	 	{
 	 		success = 0;
-	 		printf("Cannot fetch instruction\n");
+	 		printf("Cannot fetch instruction.. ");
 	 		break;
 	 	}
 		BStemp = BStemp -> next;
@@ -60,7 +69,10 @@ void fetch(void)
 	}
 	
 	nextFetchedInstruction = BStemp;
-	if (success){registerBlock.PC++;}
+	if (success)
+	{
+		registerBlock.PC++;
+	}
 	//printf("fetched instruction number %d\n", registerBlock.PC);
 }
 
@@ -70,7 +82,7 @@ void decode(void)
 	{
 	    nextDecodedInstruction = decodeUnit(fetchedInstruction, decodedEnd, tail);
 	} else {
-	    printf("Nothing to Decode\n");
+	    printf("Nothing to Decode.. ");
 	}
 }
 
@@ -80,12 +92,12 @@ void execute(void)
 	if (decodedInstruction)
 	{
 	    name = operation[strtol(decodedInstruction->opcode, &endptr, 2)];
-	    printf("Executing %s\n", name);
+	    printf("Executing %s.. ", name);
 	    //printf("%d\n",atoi(decodedInstruction->opcode));
 	    executeUnit(decodedInstruction);
 	    instructionsExcecuted++;
 	} else {
-	    printf("Nothing to excecute\n");
+	    printf("Nothing to excecute.. ");
 	}
 }
 
@@ -93,7 +105,7 @@ void cycleClock (void)
 {
     fetchedInstruction = nextFetchedInstruction;
     decodedInstruction = nextDecodedInstruction;
-    printf("Clock cycle number %d\n", clock++);
+    printf("Clock cycle number %d", procClock++);
 }
 
 void clearPipeline(void)
@@ -105,8 +117,6 @@ void clearPipeline(void)
 void init(void)
 {
 	char * operand = malloc((sizeof(char)*32));
-	char * comment = malloc((sizeof(char)*256));
-	char * opcode;
 	
 	int instNum = 1;
 	finished = 0;
@@ -214,8 +224,8 @@ void test (void)
 
 void stats(void)
 {
-    printf("--------------------------\nStats:\n");
+    printf("\nStats:\n");
     printf("Instructions Excecuted:        %d\n", instructionsExcecuted);
-    printf("Clock Cycles:                  %d\n", clock);
-    printf("Clock Cycles per Instruction:  %f\n--------------------------\n", ((float)clock/instructionsExcecuted));
+    printf("Clock Cycles:                  %d\n", procClock);
+    printf("Clock Cycles per Instruction:  %f\n--------------------------\n", ((float)procClock/instructionsExcecuted));
 }

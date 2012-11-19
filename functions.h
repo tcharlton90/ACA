@@ -2,6 +2,7 @@
 
 #define NUMREGISTERS 16
 #define MEMORYSIZE 4000
+#define SPEED 10000000 //speed is delay in ns
 
 void fetch(void);
 

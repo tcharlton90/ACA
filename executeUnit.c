@@ -12,26 +12,24 @@ void executeUnit ( POP *decodedInstruction )
 			i = registerBlock.reg[decodedInstruction->op1];
 			k = registerBlock.reg[decodedInstruction->op2];
 			registerBlock.reg[j] = i + k;
+			//printf("ADD: %d, %d, %d\n", registerBlock.reg[j], i, k);
 			break;
 		case 1: //SUB
 			j = decodedInstruction->reg1;
-			l = decodedInstruction->op1;
-			i = registerBlock.reg[l];
-			k = decodedInstruction->op2;
+			i = registerBlock.reg[decodedInstruction->op1];
+			k = registerBlock.reg[decodedInstruction->op2];
 			registerBlock.reg[j] = i - k;
 			break;
 		case 10: //MUL
 			j = decodedInstruction->reg1;
-			l = decodedInstruction->op1;
-			i = registerBlock.reg[l];
-			k = decodedInstruction->op2;
+			i = registerBlock.reg[decodedInstruction->op1];
+			k = registerBlock.reg[decodedInstruction->op2];
 			registerBlock.reg[j] = i * k;
 			break;
 		case 11: //DIV
 			j = decodedInstruction->reg1;
-			l = decodedInstruction->op1;
-			i = registerBlock.reg[l];
-			k = decodedInstruction->op2;
+			i = registerBlock.reg[decodedInstruction->op1];
+			k = registerBlock.reg[decodedInstruction->op2];
 			registerBlock.reg[j] = i / k;
 			break;
 		case 100: //CMP
@@ -43,19 +41,19 @@ void executeUnit ( POP *decodedInstruction )
 			if (j > k)
 			{
 				registerBlock.FLAG_GT = true;
-				printf("%d,%d\n",j , k);
+				//printf("%d,%d\n",j , k);
 			} else if ( j == k)
 			{
 				registerBlock.FLAG_E = true;
-				printf("%d,%d\n",j , k);
+				//printf("%d,%d\n",j , k);
 			} else if ( j < k)
 			{
 				registerBlock.FLAG_LT = true;
-				printf("%d,%d\n",j , k);
+				//printf("%d,%d\n",j , k);
 			}
 			break;
 		case 101: //MOV
-			printf("moving %d to register %d\n", decodedInstruction->op1, decodedInstruction->reg1);
+			//printf("moving %d to register %d\n", decodedInstruction->op1, decodedInstruction->reg1);
 			i = decodedInstruction->op1;
 			j = decodedInstruction->reg1;
 			registerBlock.reg[j] = i;
@@ -80,7 +78,7 @@ void executeUnit ( POP *decodedInstruction )
 			i = decodedInstruction->Maddress;
 			if (registerBlock.FLAG_LT)
 			{
-				registerBlock.PC = i;
+				//registerBlock.PC = i;
 				registerBlock.FLAG_LT = false;
 				//clearPipeline();
 			} else {
@@ -119,7 +117,7 @@ void executeUnit ( POP *decodedInstruction )
 			//printf("-------------------------------------\n");
 			finished = 1;
 			stats();
-			test();
+			//test();
 			break;
 		default:
 			break;

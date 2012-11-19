@@ -12,7 +12,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	char* endptr;
 	char * operand = malloc((sizeof(char)*32));
 	struct POP * decodedInstruction, *temp;
-	printf("Decoding\n");
+	printf("Decoding.. ");
 
 	operand = fetchedInstruction->instruction;
 	instructionNumber = fetchedInstruction->address;
@@ -210,9 +210,9 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		tail->next = temp;
 		tail = temp;
-		printf("instNum: %d\n", temp -> instructionAddress);
-		printf("%d, %s, %d\n",temp -> op1, twofourbitop, sizeof(twofourbitop));
-		printf("%d\n",temp->reg1);
+		//printf("instNum: %d\n", temp -> instructionAddress);
+		//printf("%d, %s\n",temp -> op1, twofourbitop);
+		//printf("%d\n",temp->reg1);
 	} else if (!strncmp(operand, "0110", 4))
 	{
 		//printf("found LDR\n");
