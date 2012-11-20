@@ -47,7 +47,7 @@ void fetch(void)
 		if (BStemp->next == NULL)
 	 	{
 	 		success = 0;
-	 		printf("Cannot fetch instruction.. ");
+	 		printf("Cannot fetch instruction.. %d\n", procClock);
 	 		break;
 	 	}
 		BStemp = BStemp -> next;
@@ -82,7 +82,7 @@ void decode(void)
 	{
 	    nextDecodedInstruction = decodeUnit(fetchedInstruction, decodedEnd, tail);
 	} else {
-	    printf("Nothing to Decode.. ");
+	    printf("Nothing to Decode.. %d                                 \n", procClock);
 	}
 }
 
@@ -97,7 +97,7 @@ void execute(void)
 	    executeUnit(decodedInstruction);
 	    instructionsExcecuted++;
 	} else {
-	    printf("Nothing to excecute.. ");
+	    printf("Nothing to excecute.. %d\n", procClock);
 	}
 }
 
@@ -105,6 +105,8 @@ void cycleClock (void)
 {
     fetchedInstruction = nextFetchedInstruction;
     decodedInstruction = nextDecodedInstruction;
+    clearPipeline();
+	fflush(stdout);
     printf("Clock cycle number %d", procClock++);
 }
 
