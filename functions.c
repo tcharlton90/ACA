@@ -1,77 +1,21 @@
 #include "stdio.h"
 #include "stdlib.h"
-#include "time.h"
 #include "string.h"
 #include "functions.h"
+#include "fetchUnit.h"
 #include "decodeUnit.h"
 #include "executeUnit.h"
-#include "branch.h"
 
 FILE * program;
 struct POP * head, *temp, *tail;
-struct bitStream *BShead , *BStemp;
 int decodedEnd = 0, procClock = 1, instructionsExcecuted = 0;
 char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT","BE","BGT","JMP","RTN","END"};
 
-struct timespec tim, tim2;
-
 void fetch(void)
 {
-	int success = 1, target = 0, scalar = 0;
-	char Maddress[20];
-	BStemp = BShead;
-	printf("                    ");
-	fflush(stdout);
-	tim.tv_sec = 0;
-	tim.tv_nsec = SPEED;
-	nanosleep(&tim , &tim2);
-	printf("\r");
-	while (scalar < NSCALAR)
-	{
-		printf("Fetching.. ");
-		while ( BStemp->address != registerBlock.PC)
-		{
-			//printf("%d\n", registerBlock.PC);
-			if (BStemp->next == NULL)
-		 	{
-		 		success = 0;
-		 		printf("Cannot fetch instruction.. %d\n", procClock);
-		 		break;
-		 	}
-			BStemp = BStemp -> next;
-		}
-		//printf("\n%d - %s\n",BStemp -> address, BStemp -> instruction);
-		
-		// If instruction is a branch
-		if (strncmp("10", BStemp->instruction, 2) == 0)
-		{
-		    //printf("BRANCHING\n");
-		    //printf("%s\n", BStemp->instruction+4);
-		    strncpy(Maddress, BStemp->instruction+4, 20);
-		    target = branchPredict(Maddress);
-		    if (target)
-		    {
-			success = 0;
-			registerBlock.PC = target;
-		    }
-		}
-		
-		nextFetchedInstruction[scalar] = BStemp;
-		if (success)
-		{
-			//printf("fetched instruction number %d\n", registerBlock.PC);
-			registerBlock.PC++;
-		}
-
-		// check for END
-		if (strncmp("1110", BStemp->instruction, 4) == 0)
-		{
-			break;
-		}
-		
-		scalar++;
-	}
+	fetchUnit();
 }
+
 
 void decode(void)
 {
@@ -82,7 +26,7 @@ void decode(void)
 		{
 		    nextDecodedInstruction[scalar] = decodeUnit(fetchedInstruction[scalar], decodedEnd, tail);
 		} else {
-		    printf("Nothing to Decode.. %d\n", procClock);
+		    printf("Nothing to Decode.. \n");
 		}
 		scalar++;
 	}
@@ -102,7 +46,7 @@ void execute(void)
 		    executeUnit(decodedInstruction[scalar]);
 		    instructionsExcecuted++;
 		} else {
-		    printf("Nothing to excecute.. %d\n", procClock);
+		    printf("Nothing to excecute.. \n");
 		}
 		scalar++;
 	}

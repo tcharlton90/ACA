@@ -51,6 +51,7 @@ typedef struct bitStream{
 	struct bitStream *next;
 } bitStream;
 
+struct bitStream *BShead , *BStemp;
 
 struct registers registerBlock;
 
