@@ -18,8 +18,8 @@ struct timespec tim, tim2;
 //-----------------------------//
 //
 // Pipeline stage results
-struct bitStream * fetchedInstruction, * nextFetchedInstruction;
-struct POP * decodedInstruction, * nextDecodedInstruction;
+struct bitStream * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
+struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR];
 //
 //
 //
@@ -31,7 +31,7 @@ struct POP * decodedInstruction, * nextDecodedInstruction;
 
 void fetch(void)
 {
-	int success = 1, target = 0;
+	int success = 1, target = 0, scalar = 0;
 	char Maddress[20];
 	BStemp = BShead;
 	printf("                    ");
@@ -39,81 +39,112 @@ void fetch(void)
 	tim.tv_sec = 0;
 	tim.tv_nsec = SPEED;
 	nanosleep(&tim , &tim2);
-	//printf("\r");
-	printf("\rFetching.. ");
-	while ( BStemp->address != registerBlock.PC)
+	printf("\r");
+	while (scalar < NSCALAR)
 	{
-		//printf("%d\n", registerBlock.PC);
-		if (BStemp->next == NULL)
-	 	{
-	 		success = 0;
-	 		printf("Cannot fetch instruction.. %d\n", procClock);
-	 		break;
-	 	}
-		BStemp = BStemp -> next;
+		printf("Fetching.. ");
+		while ( BStemp->address != registerBlock.PC)
+		{
+			//printf("%d\n", registerBlock.PC);
+			if (BStemp->next == NULL)
+		 	{
+		 		success = 0;
+		 		printf("Cannot fetch instruction.. %d\n", procClock);
+		 		break;
+		 	}
+			BStemp = BStemp -> next;
+		}
+		//printf("\n%d - %s\n",BStemp -> address, BStemp -> instruction);
+		
+		// If instruction is a branch
+		if (strncmp("10", BStemp->instruction, 2) == 0)
+		{
+		    //printf("BRANCHING\n");
+		    //printf("%s\n", BStemp->instruction+4);
+		    strncpy(Maddress, BStemp->instruction+4, 20);
+		    target = branchPredict(Maddress);
+		    if (target)
+		    {
+			success = 0;
+			registerBlock.PC = target;
+		    }
+		}
+		
+		nextFetchedInstruction[scalar] = BStemp;
+		if (success)
+		{
+			//printf("fetched instruction number %d\n", registerBlock.PC);
+			registerBlock.PC++;
+		}
+
+		// check for END
+		if (strncmp("1110", BStemp->instruction, 4) == 0)
+		{
+			break;
+		}
+		
+		scalar++;
 	}
-	//printf("%d - %s\n",BStemp -> address, BStemp -> instruction);
-	
-	// If instruction is a branch
-	if (strncmp("10", BStemp->instruction, 2) == 0)
-	{
-	    //printf("BRANCHING\n");
-	    //printf("%s\n", BStemp->instruction+4);
-	    strncpy(Maddress, BStemp->instruction+4, 20);
-	    target = branchPredict(Maddress);
-	    if (target)
-	    {
-		success = 0;
-		registerBlock.PC = target;
-	    }
-	}
-	
-	nextFetchedInstruction = BStemp;
-	if (success)
-	{
-		registerBlock.PC++;
-	}
-	//printf("fetched instruction number %d\n", registerBlock.PC);
 }
 
 void decode(void)
 {
-	if (fetchedInstruction)
+	int scalar = 0;
+	while (scalar < NSCALAR)
 	{
-	    nextDecodedInstruction = decodeUnit(fetchedInstruction, decodedEnd, tail);
-	} else {
-	    printf("Nothing to Decode.. %d                                 \n", procClock);
+		if (fetchedInstruction[scalar])
+		{
+		    nextDecodedInstruction[scalar] = decodeUnit(fetchedInstruction[scalar], decodedEnd, tail);
+		} else {
+		    printf("Nothing to Decode.. %d                                 \n", procClock);
+		}
+		scalar++;
 	}
 }
 
 void execute(void)
 {
 	char * name, * endptr;
-	if (decodedInstruction)
+	int scalar = 0;
+	while (scalar < NSCALAR)
 	{
-	    name = operation[strtol(decodedInstruction->opcode, &endptr, 2)];
-	    printf("Executing %s.. ", name);
-	    //printf("%d\n",atoi(decodedInstruction->opcode));
-	    executeUnit(decodedInstruction);
-	    instructionsExcecuted++;
-	} else {
-	    printf("Nothing to excecute.. %d\n", procClock);
+		if (decodedInstruction[scalar])
+		{
+		    name = operation[strtol(decodedInstruction[scalar]->opcode, &endptr, 2)];
+		    printf("Executing %s.. ", name);
+		    //printf("%d\n",atoi(decodedInstruction[NSCALAR]->opcode));
+		    executeUnit(decodedInstruction[scalar]);
+		    instructionsExcecuted++;
+		} else {
+		    printf("Nothing to excecute.. %d\n", procClock);
+		}
+		scalar++;
 	}
 }
 
 void cycleClock (void)
 {
-    fetchedInstruction = nextFetchedInstruction;
-    decodedInstruction = nextDecodedInstruction;
+    int i = 0;
+	while (i < NSCALAR)
+	{
+    	fetchedInstruction[i] = nextFetchedInstruction[i];
+    	decodedInstruction[i] = nextDecodedInstruction[i];
+    	i++;
+    }
     clearPipeline();
 	fflush(stdout);
-    printf("Clock cycle number %d", procClock++);
+    printf("\nClock cycle number %d\n", procClock++);
 }
 
 void clearPipeline(void)
 {
-    nextFetchedInstruction = NULL;
-    nextDecodedInstruction = NULL;
+	int i = 0;
+	while (i < NSCALAR)
+	{
+    	nextFetchedInstruction[i] = NULL;
+    	nextDecodedInstruction[i] = NULL;
+    	i++;
+    }
 }
 
 void init(void)
@@ -229,5 +260,6 @@ void stats(void)
     printf("\nStats:\n");
     printf("Instructions Excecuted:        %d\n", instructionsExcecuted);
     printf("Clock Cycles:                  %d\n", procClock);
-    printf("Clock Cycles per Instruction:  %f\n--------------------------\n", ((float)procClock/instructionsExcecuted));
+    printf("Clock Cycles per Instruction:  %f\n", ((float)procClock/instructionsExcecuted));
+    printf("Instructions per Clock Cycle:  %f\n", ((float)instructionsExcecuted/procClock));
 }
