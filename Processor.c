@@ -3,6 +3,7 @@
 #include "functions.h"
 
 // TODO change read-in hack to strcmp
+//	Branch predictor: not right or wrong, predicted taken or predicted not taken
 //	Super-scaler
 //	Out of order
 //	Register renaming unit

@@ -72,6 +72,7 @@ void executeUnit ( POP *decodedInstruction )
 			i = decodedInstruction->Maddress;
 			registerBlock.PC = i;
 			clearPipeline();
+			clearInstructionIssue();
 			//printf("%d\n",i);
 			break;
 		case 1001: //BLT
@@ -80,6 +81,7 @@ void executeUnit ( POP *decodedInstruction )
 			{
 				//registerBlock.PC = i;
 				registerBlock.FLAG_LT = false;
+				clearInstructionIssue();
 				//clearPipeline();
 			} else {
 				//branch prediction got it wrong

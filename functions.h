@@ -15,6 +15,8 @@ void cycleClock(void);
 
 void clearPipeline(void);
 
+void clearInstructionIssue(void);
+
 void init(void);
 
 void testinit(void);
@@ -55,3 +57,6 @@ struct registers registerBlock;
 int finished;
 
 int memory[MEMORYSIZE];
+
+struct bitStream * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
+struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR];

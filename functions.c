@@ -15,20 +15,6 @@ char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT"
 
 struct timespec tim, tim2;
 
-//-----------------------------//
-//
-// Pipeline stage results
-struct bitStream * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
-struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR];
-//
-//
-//
-//
-//
-//
-//
-//-----------------------------//
-
 void fetch(void)
 {
 	int success = 1, target = 0, scalar = 0;
@@ -96,7 +82,7 @@ void decode(void)
 		{
 		    nextDecodedInstruction[scalar] = decodeUnit(fetchedInstruction[scalar], decodedEnd, tail);
 		} else {
-		    printf("Nothing to Decode.. %d                                 \n", procClock);
+		    printf("Nothing to Decode.. %d\n", procClock);
 		}
 		scalar++;
 	}
@@ -133,7 +119,7 @@ void cycleClock (void)
     }
     clearPipeline();
 	fflush(stdout);
-    printf("\nClock cycle number %d\n", procClock++);
+    printf("\nClock cycle number %d\n\n", procClock++);
 }
 
 void clearPipeline(void)
@@ -145,6 +131,16 @@ void clearPipeline(void)
     	nextDecodedInstruction[i] = NULL;
     	i++;
     }
+}
+
+void clearInstructionIssue(void)
+{
+	int scalar = 0;
+	while(scalar < NSCALAR)
+	{
+		decodedInstruction[scalar] = NULL;
+		scalar++;
+	}
 }
 
 void init(void)
