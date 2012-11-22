@@ -1,0 +1,397 @@
+b main
+first_difference: mov r3, r0, #2
+add r3, r3, #14
+add fp, sp, #20
+bic r3, r3, #7
+sub sp, sp, #8
+sub sp, sp, r3
+cmp r1, #0
+sub sp, sp, r3
+mov r8, sp
+ble .L1
+sub r6, r0, #3
+bic r6, r6, #1
+mov r7, #1
+add r6, r6, #2
+.L2: cmp r0, #0
+ble .L5
+cmp r0, #2
+mov r3, #0
+ble .L7
+mov r1, r8
+mov r3, #0
+.L6: add r3, r3, #2
+rsb r5, ip, r4
+cmp r3, r6
+rsb r4, r4, ip
+add r2, r2, #8
+bne .L6
+.L7: sub r1, r3, #1
+add r2, r8, r3, asl #2
+add r1, ip, r1, asl #2
+.L4: add r3, r3, #1
+rsb ip, ip, r4
+cmp r0, r3
+bgt .L4
+.L5: add r7, r7, #1
+cmp r3, r7
+bge .L2
+.L1: sub sp, fp, #20
+b r16
+first_sum: mov r2, r0, #2
+add r2, r2, #14
+add fp, sp, #20
+bic r2, r2, #7
+sub sp, sp, #8
+sub sp, sp, r2
+mov r3, sp
+subs r8, r1, #0
+sub sp, sp, r2
+ble .L13
+mov r6, #1
+.L17: cmp r0, #1
+ble .L15
+mov ip, r3
+mov r1, r7
+mov r2, #1
+.L16: add r2, r2, #1
+add r1, r1, r5
+cmp r2, r0
+bne .L16
+.L15: add r6, r6, #1
+cmp r8, r6
+bge .L17
+.L13: sub sp, fp, #20
+b r16
+vector_addition: str fp, [sp, #-4]!
+mov r3, r0, asl #2
+add r3, r3, #14
+bic r3, r3, #7
+add fp, sp, #0
+sub sp, sp, r3
+mov r2, sp
+cmp r0, #0
+sub sp, sp, r3
+mov r1, sp
+sub sp, sp, r3
+ble .L20
+add r3, r3, r3, asl #2
+add r1, r1, r3
+mov r3, #0
+.L22: add r3, r3, #1
+cmp r3, r0
+str r1, [r2], #4
+bne .L22
+.L20: add sp, fp, #0
+ldmfd sp!, {fp}
+b r16
+mov r3, r0, #2
+add r3, r3, #14
+add fp, sp, #20
+bic r3, r3, #7
+sub sp, sp, #16
+sub sp, sp, r3
+mov r8, sp
+sub sp, sp, r3
+cmp r1, #0
+str sp, [fp, #-28]
+sub sp, sp, r3
+str r1, [fp, #-24]
+str sp, [fp, #-32]
+movgt r7, #1
+ble .L24
+.L25: cmp r0, #1
+ble .L28
+ldr r2, [r8, #0]
+ldr r4, [fp, #-32]
+ldr ip, [fp, #-28]
+mov r1, r8
+mov r3, #1
+.L27: ldr r6, [ip, #4]!
+ldr r5, [r4, #4]!
+rsb r2, r2, r6
+mul r2, r5, r2
+add r3, r3, #1
+cmp r3, r0
+str r2, [r1, #4]!
+bne .L27
+.L28: ldr r3, [fp, #-24]
+add r7, r7, #1
+cmp r3, r7
+bge .L25
+.L24: sub sp, fp, #20
+b r16
+matrix_multiply: mov r2, r0, asl #2
+mov r3, r2
+mul r3, r1, r3
+add fp, sp, #20
+sub sp, sp, #24
+add r3, r3, #14
+str r0, [fp, #-24]
+bic r3, r3, #7
+str r2, [fp, #-32]
+ldr r2, [fp, #-24]
+sub sp, sp, r3
+cmp r2, #0
+mov r0, sp
+sub sp, sp, r3
+str sp, [fp, #-40]
+movgt r2, #1
+sub sp, sp, r3
+mov r7, sp
+strgt r2, [fp, #-36]
+ble .L31
+.L39: ldr r3, [fp, #-40]
+mov r6, #0
+str r3, [fp, #-28]
+.L40: mov r4, #0
+.L38: cmp r1, #0
+ble .L36
+ldr r3, [fp, #-28]
+ldr r5, [r3, r4, asl #2]
+mov r3, #0
+.L34: ldr ip, [fp, #-24]
+mul ip, r3, ip
+add r2, ip, r4
+add ip, ip, r6
+ldr r8, [r0, r2, asl #2]
+ldr ip, [r7, ip, asl #2]
+add r3, r3, #1
+mla ip, r5, ip, r8
+cmp r3, r1
+str ip, [r0, r2, asl #2]
+bne .L34
+.L36: add r4, r4, #1
+cmp r4, #25
+bne .L38
+ldr r2, [fp, #-28]
+ldr r3, [fp, #-32]
+add r6, r6, #1
+add r2, r2, r3
+cmp r6, #25
+str r2, [fp, #-28]
+bne .L40
+ldr r2, [fp, #-36]
+ldr r3, [fp, #-24]
+add r2, r2, #1
+cmp r3, r2
+str r2, [fp, #-36]
+bge .L39
+.L31: sub sp, fp, #20
+b r16
+linear_Recurrence: mul r3, r1, r1
+mov r2, r1, asl #2
+add r2, r2, #14
+mov r3, r3, asl #2
+add fp, sp, #20
+bic r2, r2, #7
+sub sp, sp, #8
+add r3, r3, #14
+cmp r0, #0
+sub sp, sp, r2
+bic r3, r3, #7
+mov r8, sp
+movgt r2, #1
+sub sp, sp, r3
+str r0, [fp, #-28]
+mov r7, sp
+strgt r2, [fp, #-24]
+ble .L43
+.L44: cmp r1, #1
+movgt r6, r8
+movgt r0, #1
+ble .L47
+.L48: ldr r2, [r6, #4]
+add ip, r8, r0, asl #2
+mov r3, #0
+.L46: mla r5, r3, r1, r0
+ldr r4, [ip, #-4]!
+ldr r5, [r7, r5, asl #2]
+add r3, r3, #1
+mla r2, r5, r4, r2
+cmp r3, r0
+str r2, [r6, #4]
+bne .L46
+add r0, r0, #1
+cmp r0, r1
+add r6, r6, #4
+bne .L48
+.L47: ldr r2, [fp, #-24]
+ldr r3, [fp, #-28]
+add r2, r2, #1
+cmp r3, r2
+str r2, [fp, #-24]
+bge .L44
+.L43: sub sp, fp, #20
+b r16
+inner_product: mov r3, r1, asl #2
+add r3, r3, #14
+add fp, sp, #24
+bic r3, r3, #7
+sub sp, sp, #20
+cmp r0, #0
+sub sp, sp, r3
+str sp, [fp, #-32]
+sub sp, sp, r3
+movgt r3, #1
+mov r7, r1
+str r0, [fp, #-40]
+mov r8, sp
+strgt r3, [fp, #-36]
+ble .L54
+.L53: cmp r7, #0
+movle r6, #0
+ble .L56
+mov r4, #0
+mov r6, #0
+mov r5, r4
+.L55: ldr r2, [fp, #-32]
+ldr r0, [r8, r4] 
+ldr r1, [r2, r4] 
+bl __aeabi_fmul
+mov r1, r0
+mov r0, r6
+bl __aeabi_fadd
+add r5, r5, #1
+cmp r5, r7
+mov r6, r0
+add r4, r4, #4
+bne .L55
+.L56: ldr r3, [fp, #-36]
+ldr r2, [fp, #-40]
+add r3, r3, #1
+cmp r2, r3
+str r3, [fp, #-36]
+bge .L53
+.L54: mov r0, r6
+bl __aeabi_f2d
+mov r2, r0
+mov r3, r1
+ldr r0, .L60
+bl printf
+sub sp, fp, #24
+ICCG: mov r3, r0, asl #2
+add fp, sp, #20
+sub sp, sp, #24
+add r3, r3, #14
+bic r3, r3, #7
+str r0, [fp, #-40]
+ldr r0, [fp, #4]
+sub sp, sp, r3
+str sp, [fp, #-28]
+cmp r0, #0
+sub sp, sp, r3
+str sp, [fp, #-32]
+ble .L62
+mov r1, #1
+str r1, [fp, #-36]
+.L67: ldr r2, [fp, #-40]
+mov r8, #0
+mov r3, r2
+.L66: add r7, r8, r3
+add r2, r8, #1
+add r3, r3, r3, lsr #31
+mov r3, r3, asr #1
+cmp r7, r2
+str r3, [fp, #-24]
+ble .L64
+ldr r1, [fp, #-28]
+ldr ip, [fp, #-32]
+add r3, r1, r2, asl #2
+add r1, ip, r8, asl #2
+ldr ip, [fp, #-28]
+sub r0, r7, #1
+add r0, ip, r0, asl #2
+.L65: ldr r6, [r3, #-4]
+ldr r5, [r1, #4]
+ldr r4, [r3, #4]
+ldr ip, [r1, #8]!
+mul r5, r6, r5
+mul ip, r4, ip
+ldr r6, [r3, #0]
+add r2, r2, #2
+rsb r5, r5, r6
+rsb ip, ip, r5
+cmp r7, r2
+str ip, [r0, #4]!
+add r3, r3, #8
+bgt .L65
+rsb r3, r8, r7
+sub r3, r3, #2
+add r8, r8, #3
+bic r2, r3, #1
+add r2, r8, r2
+.L64: ldr r0, [fp, #-24]
+cmp r0, #0
+movgt r8, r7
+ldrgt r3, [fp, #-24]
+bgt .L66
+.L71: ldr r1, [fp, #-36]
+ldr r3, [fp, #4]
+add r1, r1, #1
+cmp r3, r1
+str r1, [fp, #-36]
+bge .L67
+ldr r3, .L72
+str r2, [r3, #0]
+.L62: sub sp, fp, #20
+b r16
+hydro_fragment: mov r4, r0, asl #2
+add r4, r4, #14
+add fp, sp, #20
+bic r4, r4, #7
+sub sp, sp, #24
+sub sp, sp, r4
+str sp, [fp, #-24]
+sub sp, sp, r4
+mov ip, sp
+sub sp, sp, r4
+ldr r4, [fp, #4]
+ldr r7, .L82
+mov r8, r2
+cmp r4, #0
+mov r2, #1
+str r1, [fp, #-28]
+str sp, [fp, #-36]
+str r2, [r7, #0]
+ble .L74
+mov r1, #0
+str r1, [fp, #-32]
+.L78: cmp r0, #0
+movle r2, #0
+ble .L76
+ldr r5, [fp, #-36]
+mov r2, #0
+ldr r4, [r5, #40]!
+mov r1, r2
+str r3, [fp, #-40]
+.L77: mul r6, r4, r8
+ldr r3, [fp, #-40]
+ldr r4, [r5, #4]!
+ldr r7, [ip, r2]
+mla r6, r3, r4, r6
+ldr r3, [fp, #-28]
+add r1, r1, #1
+mla r6, r7, r6, r3
+ldr r7, [fp, #-24]
+cmp r0, r1
+str r6, [r7, r2]
+add r2, r2, #4
+bne .L77
+ldr r3, [fp, #-40]
+mov r2, r0
+.L76: ldr r1, [fp, #-32]
+ldr r4, [fp, #4]
+add r1, r1, #1
+cmp r1, r4
+str r1, [fp, #-32]
+bne .L78
+add r3, r1, #1
+ldr r7, .L82
+ldr r1, .L82+4
+str r3, [r7, #0]
+str r2, [r1, #0]
+.L74: sub sp, fp, #20
+b r16
+main: mov r0, #0
+b r16
