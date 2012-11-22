@@ -14,6 +14,7 @@ char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT"
 void fetch(void)
 {
 	int scalar = 0;
+
 	printf("                    ");
 	fflush(stdout);
 	printf("\r");
@@ -32,6 +33,7 @@ void fetch(void)
 void decode(void)
 {
 	int scalar = 0;
+
 	while (scalar < NSCALAR)
 	{
 		if (fetchedInstruction[scalar])
@@ -48,6 +50,7 @@ void execute(void)
 {
 	char * name, * endptr;
 	int scalar = 0;
+
 	while (scalar < NSCALAR)
 	{
 		if (decodedInstruction[scalar])
@@ -67,6 +70,7 @@ void execute(void)
 void cycleClock (void)
 {
     int i = 0;
+
 	while (i < NSCALAR)
 	{
     	fetchedInstruction[i] = nextFetchedInstruction[i];
@@ -81,6 +85,7 @@ void cycleClock (void)
 void clearPipeline(void)
 {
 	int i = 0;
+
 	while (i < NSCALAR)
 	{
     	nextFetchedInstruction[i] = NULL;
@@ -92,6 +97,7 @@ void clearPipeline(void)
 void clearInstructionIssue(void)
 {
 	int scalar = 0;
+
 	while(scalar < NSCALAR)
 	{
 		decodedInstruction[scalar] = NULL;
@@ -102,10 +108,12 @@ void clearInstructionIssue(void)
 void init(void)
 {
 	char * operand = malloc((sizeof(char)*32));
-	
-	int instNum = 1;
+	int instNum = 1;	
+	struct bitStream *BStail;
+
 	finished = 0;
 	fetchedAll = 0;
+
 	//set registers to 0
 	memset(registerBlock.reg,0,NUMREGISTERS);
 	registerBlock.PC = 1;
@@ -119,14 +127,10 @@ void init(void)
 	//open program and create instruction buffer
 	program = fopen("testProgramMC.txt","r+");
 	
+
+	// sort out some structs to hold the program (linked lists)
 	head = malloc(sizeof(struct POP));
 	tail = head;
-
-	//show start of fetch
-	//printf("Loading program...\n");
-	
-	struct bitStream *BStail;
-	
 	BShead = malloc(sizeof(struct bitStream));
 	BStail = BShead;
 
@@ -157,9 +161,12 @@ void init(void)
 
 void testinit(void)
 {
+
 	temp = malloc(sizeof(struct POP));
 	temp = head;
+
 	printf("-------------STARTING TEST------------\n");
+
 	while(1)
 	{
 		printf("-----testing------\n");
@@ -197,8 +204,8 @@ void testinit(void)
 
 void test (void)
 {
-	int i;
-	int j = 0;
+	int i, j = 0;
+	
 	while (j < NUMREGISTERS)
 	{
 		i = registerBlock.reg[j];

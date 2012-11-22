@@ -4,7 +4,6 @@
 
 void executeUnit ( POP *decodedInstruction )
 {
-
 	int j, i, k, l; // reg, op1, op2, tmp
 	switch(atoi(decodedInstruction->opcode)){
 		case 0: //ADD

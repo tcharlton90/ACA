@@ -11,19 +11,23 @@ bitStream * fetchUnit(void)
 {
 	int success = 1, target = 0;
 	char Maddress[20];
+
 	BStemp = BShead;
+
 	tim.tv_sec = 0;
 	tim.tv_nsec = SPEED;
 	nanosleep(&tim , &tim2);
+
 	printf("Fetching.. ");
+
 	if (fetchedAll)
 	{
 		printf("Cannot fetch instruction.. ");
 		return NULL;
 	}
+
 	while ( BStemp->address != registerBlock.PC)
 	{
-		//printf("%d\n", registerBlock.PC);
 		if (BStemp->next == NULL)
 	 	{
 	 		success = 0;
@@ -37,8 +41,6 @@ bitStream * fetchUnit(void)
 	// If instruction is a branch
 	if (strncmp("10", BStemp->instruction, 2) == 0)
 	{
-	    //printf("BRANCHING\n");
-	    //printf("%s\n", BStemp->instruction+4);
 	    strncpy(Maddress, BStemp->instruction+4, 20);
 	    target = branchPredict(Maddress);
 	    if (target)
@@ -50,7 +52,6 @@ bitStream * fetchUnit(void)
 	
 	if (success)
 	{
-		//printf("fetched instruction number %d\n", registerBlock.PC);
 		registerBlock.PC++;
 	}
 

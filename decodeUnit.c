@@ -6,17 +6,13 @@
 POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 {
 	int op, instructionNumber;
-	char twofourbitop[24];
-	char twozerobitop[20];
-	char fourbitop[4];
-	char* endptr;
-	char * operand = malloc((sizeof(char)*32));
+	char twofourbitop[24], fourbitop[4], twozerobitop[20], * operand = malloc((sizeof(char)*32)), * endptr;
 	struct POP * decodedInstruction, *temp;
+	
 	printf("Decoding.. ");
 
 	operand = fetchedInstruction->instruction;
 	instructionNumber = fetchedInstruction->address;
-	//printf("op: %s\n", operand);
 
 	if(!strncmp(operand, "0000", 4))
 	{
