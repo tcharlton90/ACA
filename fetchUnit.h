@@ -1,1 +1,1 @@
-void fetchUnit(void);
+bitStream * fetchUnit(void);

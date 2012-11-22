@@ -55,9 +55,7 @@ struct bitStream *BShead , *BStemp;
 
 struct registers registerBlock;
 
-int finished;
-
-int memory[MEMORYSIZE];
+int finished, fetchedAll, memory[MEMORYSIZE];
 
 struct bitStream * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
 struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR];

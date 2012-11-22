@@ -13,7 +13,19 @@ char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT"
 
 void fetch(void)
 {
-	fetchUnit();
+	int scalar = 0;
+	printf("                    ");
+	fflush(stdout);
+	printf("\r");
+	while (scalar < NSCALAR)
+	{
+		nextFetchedInstruction[scalar] = fetchUnit();
+		// if(nextFetchedInstruction[scalar] == NULL)
+		// {
+		// 	break;
+		// }
+		scalar++;
+	}
 }
 
 
@@ -26,7 +38,7 @@ void decode(void)
 		{
 		    nextDecodedInstruction[scalar] = decodeUnit(fetchedInstruction[scalar], decodedEnd, tail);
 		} else {
-		    printf("Nothing to Decode.. \n");
+		    printf("Nothing to Decode.. ");
 		}
 		scalar++;
 	}
@@ -46,7 +58,7 @@ void execute(void)
 		    executeUnit(decodedInstruction[scalar]);
 		    instructionsExcecuted++;
 		} else {
-		    printf("Nothing to excecute.. \n");
+		    printf("Nothing to excecute.. ");
 		}
 		scalar++;
 	}
@@ -93,6 +105,7 @@ void init(void)
 	
 	int instNum = 1;
 	finished = 0;
+	fetchedAll = 0;
 	//set registers to 0
 	memset(registerBlock.reg,0,NUMREGISTERS);
 	registerBlock.PC = 1;
