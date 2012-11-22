@@ -105,7 +105,7 @@ void clearInstructionIssue(void)
 	}
 }
 
-void init(void)
+void init( char * argv[] )
 {
 	char * operand = malloc((sizeof(char)*32));
 	int instNum = 1;	
@@ -125,7 +125,13 @@ void init(void)
 	memset(memory, 0,MEMORYSIZE);
 
 	//open program and create instruction buffer
-	program = fopen("testProgramMC.txt","r+");
+	//printf("%s\n", argv[1]);
+	program = fopen(argv[1],"r+");
+	if (!program)
+	{
+		printf("%s is not a recognised program!\n", argv[1]);
+		exit(EXIT_FAILURE);
+	}
 	
 
 	// sort out some structs to hold the program (linked lists)
@@ -205,7 +211,7 @@ void testinit(void)
 void test (void)
 {
 	int i, j = 0;
-	
+
 	while (j < NUMREGISTERS)
 	{
 		i = registerBlock.reg[j];

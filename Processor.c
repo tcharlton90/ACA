@@ -4,20 +4,20 @@
 
 // TODO change read-in hack to strcmp
 //	Branch predictor: not right or wrong, predicted taken or predicted not taken
-//	Super-scaler
+//	Nice programs
 //	Out of order
 //	Register renaming unit
 //	Other features (Rob...)
 //	Hypothesis'
 //	\r stuff and nice formatting
 
-int main (void)
+int main (int argc, char *argv[])
 {
 	char * tick = malloc(sizeof(char));
 
 	printf("Starting up\n");
 
-	init();
+	init( argv );
 	
 	printf("Started Up\n");
 

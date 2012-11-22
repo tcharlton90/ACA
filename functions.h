@@ -17,7 +17,7 @@ void clearPipeline(void);
 
 void clearInstructionIssue(void);
 
-void init(void);
+void init( char * argv[]);
 
 void testinit(void);
 
