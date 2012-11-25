@@ -35,9 +35,10 @@ void binary(int number) {
 
 int lookupBranchDest (string label)
 {
-	int i = 1;
+	int i = 0;
 	while (i < 500)
 	{
+		//cout << i << endl;
 		if (label.compare(branchDest[i]))
 		{
 			return i;
@@ -73,7 +74,7 @@ int main (int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	while (1)//fscanf(program, "%[^\n]", line) != 0)
+	while (1)
 	{
 		getline(program, line);
 		if (!program)
@@ -357,6 +358,47 @@ int main (int argc, char *argv[])
 				output << bin << endl;
 			}
 
+		} else if (command == "ldr")
+		{
+			// append a \n
+			if (line.find("\n") > 1000)
+			{
+				line.append("\n");
+			}
+
+			// with offset
+			if (line.find("[") < 1000) 
+			{ // register and offset
+
+				//cout << line << "\n";
+
+			} else { // address
+				output << "0110";
+				bin = "";
+				length = (line.find_last_of(",")-line.find_last_of("r"))-1;
+				sop = line.substr(line.find_last_of("r")+1, length);
+				//cout << sop << endl;
+				cop = sop.c_str();
+				binary(atoi(cop));
+				length = bin.length();
+				while (length < 4)
+				{
+					output << "0";
+					length++;
+				}
+				output << bin;
+
+				cout << lookupBranchDest(line.substr(line.find_last_of("\n")-line.find_last_of(","))) << endl;
+				binary(lookupBranchDest(line.substr(line.find_last_of("\n")-line.find_last_of(","))));
+				length = bin.length();
+				while (length < 20)
+				{
+					output << "0";
+					length++;
+				}
+				output << bin;
+				output << "0000" << endl;
+			}
 		}else {
 			cout << line << "\n";
 		}
@@ -374,6 +416,7 @@ int main (int argc, char *argv[])
 		// fscanf(program, "%[\n]", line);
 		lineNumber++;
 	}
+	output << "11100000000000000000000000000000" << endl;
 	program.close();
 	output.close();
 	return 0;
