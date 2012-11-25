@@ -6,6 +6,7 @@
 //	Branch predictor: not right or wrong, predicted taken or predicted not taken
 //	Nice programs
 //	Cant make a read-in super-scaler
+//	Make 32 registers
 //	Out of order
 //	Register renaming unit
 //	Other features (Rob...)
@@ -21,7 +22,7 @@ int main (int argc, char *argv[])
 	init( argv );
 	
 	printf("Started Up\n");
-
+	printf("| FETCH |  DECODE |    EXCECUTE     |    CLOCK   |\n");
 	while (1)
 	{
 		if (((int) * tick == 120) || finished)
@@ -30,11 +31,15 @@ int main (int argc, char *argv[])
 		}
 
 		fetch();
+		printf(" ");
 		decode();
+		printf("  ");
 		execute();
+		printf("   ");
 		cycleClock();
 		//testinit();
 		//test();
 	}
+	printf("\n");
 	return 0;
 }

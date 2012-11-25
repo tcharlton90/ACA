@@ -1,6 +1,6 @@
 #include "stdbool.h"
 
-#define NUMREGISTERS 16
+#define NUMREGISTERS 32
 #define MEMORYSIZE 4000
 #define SPEED 5000000 //speed is delay in ns
 #define NSCALAR 4
@@ -56,4 +56,4 @@ typedef struct bitStream{
 struct bitStream *BShead , *BStemp, * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
 struct registers registerBlock;
 struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR];
-int finished, fetchedAll, memory[MEMORYSIZE];
+int finished, fetchedAll, memory[MEMORYSIZE], branchesTaken, predictedCorrect, predictedIncorrect, NOPS, DEBUG;

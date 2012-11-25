@@ -9,7 +9,7 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	char twofourbitop[24], fourbitop[4], twozerobitop[20], * operand = malloc((sizeof(char)*32)), * endptr;
 	struct POP * decodedInstruction, *temp;
 	
-	printf("Decoding.. ");
+	printf(" D");
 
 	operand = fetchedInstruction->instruction;
 	instructionNumber = fetchedInstruction->address;
@@ -224,13 +224,13 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		op = strtol(fourbitop, &endptr, 2);
 		temp -> reg1 = op;
 
-		temp -> op1 = 0;
+		strncpy(fourbitop, operand+ 8,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op1 = op;
 		
 		temp -> op2 = 0;
 		
-		strncpy(twozerobitop, operand+ 8,20);
-		op = strtol(twozerobitop, &endptr, 2);
-		temp -> Maddress = op;
+		temp -> Maddress = 0;
 		
 		temp -> next = NULL;
 
@@ -251,13 +251,13 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		op = strtol(fourbitop, &endptr, 2);
 		temp -> reg1 = op;
 
-		temp -> op1 = 0;
+		strncpy(fourbitop, operand+ 8,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op1 = op;
 		
 		temp -> op2 = 0;
 		
-		strncpy(twozerobitop, operand+ 8,20);
-		op = strtol(twozerobitop, &endptr, 2);
-		temp -> Maddress = op;
+		temp -> Maddress = 0;
 		
 		temp -> next = NULL;
 

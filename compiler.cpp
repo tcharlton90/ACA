@@ -358,7 +358,7 @@ int main (int argc, char *argv[])
 				output << bin << endl;
 			}
 
-		} else if (command == "ldr")
+		} else if (command == "ldr") //opcode 4 Rd 4 Maddress 20
 		{
 			// append a \n
 			if (line.find("\n") > 1000)
@@ -369,10 +369,115 @@ int main (int argc, char *argv[])
 			// with offset
 			if (line.find("[") < 1000) 
 			{ // register and offset
-
 				//cout << line << "\n";
+				if(line.find("#") < 1000)
+				{ // ldr r3, [r15, #4]
+					// mov
+					output << "01011111";
+					bin = "";
+					length = (line.find_last_of("]")-line.find_last_of("#"))-1;
+					sop = line.substr(line.find_last_of("#")+1, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 24)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << endl;
+
+					// add
+					output << "00001111";
+					bin = "";
+					length = (line.find_last_of(",")-line.find_last_of("r"))-1;
+					sop = line.substr(line.find_last_of("r")+1, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << "11110000000000000000" << endl;
+
+					// ldr
+					output << "0110";
+					bin = "";
+					length = (line.find_first_of(",")-line.find_first_of("r"))-1;
+					sop = line.substr(line.find_first_of("r")+1, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << "111100000000000000000000" << endl;
+
+
+				} else { // ldr r3, [r15, r12]
+					// add
+					output << "00001111";
+					bin = "";
+					length = (line.find_last_of(",")-(line.find_first_of("[")+1)-1);
+					sop = line.substr(line.find_first_of("[")+2, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin;
+
+					bin = "";
+					length = (line.find_last_of("]")-line.find_last_of("r")-1);
+					sop = line.substr(line.find_last_of("r")+1, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << "0000000000000000" << endl;
+
+					//ldr
+					output << "0110";
+					bin = "";
+					length = (line.find_first_of(",")-line.find_first_of("r"))-1;
+					sop = line.substr(line.find_first_of("r")+1, length);
+					//cout << sop << endl;
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << "111100000000000000000000" << endl;
+				}
 
 			} else { // address
+				// mov address to register
+				output << "01011111";
+				bin = "";
+				binary(lookupBranchDest(line.substr(line.find_last_of("\n")-line.find_last_of(","))));
+				length = bin.length();
+				while (length < 24)
+				{
+					output << "0";
+					length++;
+				}
+				output << bin << endl;
+
+				// ldr register
 				output << "0110";
 				bin = "";
 				length = (line.find_last_of(",")-line.find_last_of("r"))-1;
@@ -387,17 +492,145 @@ int main (int argc, char *argv[])
 					length++;
 				}
 				output << bin;
+				
+				output << "111100000000000000000000" << endl;
+			}
+		}else if (command == "str") //opcode 4 Rd 4 Maddress 20
+		{
+			// append a \n
+			if (line.find("\n") > 1000)
+			{
+				line.append("\n");
+			}
 
-				cout << lookupBranchDest(line.substr(line.find_last_of("\n")-line.find_last_of(","))) << endl;
+			// with offset
+			if (line.find("[") < 1000) 
+			{ // register and offset
+				//cout << line << "\n";
+				if(line.find("#") < 1000)
+				{ // ldr r3, [r15, #4]
+					// mov
+					output << "01011111";
+					bin = "";
+					length = (line.find_last_of("]")-line.find_last_of("#"))-1;
+					sop = line.substr(line.find_last_of("#")+1, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 24)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << endl;
+
+					// add
+					output << "00001111";
+					bin = "";
+					length = (line.find_last_of(",")-line.find_last_of("r"))-1;
+					sop = line.substr(line.find_last_of("r")+1, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << "11110000000000000000" << endl;
+
+					// ldr
+					output << "0111";
+					bin = "";
+					length = (line.find_first_of(",")-line.find_first_of("r"))-1;
+					sop = line.substr(line.find_first_of("r")+1, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << "111100000000000000000000" << endl;
+
+
+				} else { // ldr r3, [r15, r12]
+					// add
+					output << "00001111";
+					bin = "";
+					length = (line.find_last_of(",")-(line.find_first_of("[")+1)-1);
+					sop = line.substr(line.find_first_of("[")+2, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin;
+
+					bin = "";
+					length = (line.find_last_of("]")-line.find_last_of("r")-1);
+					sop = line.substr(line.find_last_of("r")+1, length);
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << "0000000000000000" << endl;
+
+					//ldr
+					output << "0111";
+					bin = "";
+					length = (line.find_first_of(",")-line.find_first_of("r"))-1;
+					sop = line.substr(line.find_first_of("r")+1, length);
+					//cout << sop << endl;
+					cop = sop.c_str();
+					binary(atoi(cop));
+					length = bin.length();
+					while (length < 4)
+					{
+						output << "0";
+						length++;
+					}
+					output << bin << "111100000000000000000000" << endl;
+				}
+
+			} else { // address
+				// mov address to register
+				output << "01011111";
+				bin = "";
 				binary(lookupBranchDest(line.substr(line.find_last_of("\n")-line.find_last_of(","))));
 				length = bin.length();
-				while (length < 20)
+				while (length < 24)
+				{
+					output << "0";
+					length++;
+				}
+				output << bin << endl;
+
+				// ldr register
+				output << "0111";
+				bin = "";
+				length = (line.find_last_of(",")-line.find_last_of("r"))-1;
+				sop = line.substr(line.find_last_of("r")+1, length);
+				//cout << sop << endl;
+				cop = sop.c_str();
+				binary(atoi(cop));
+				length = bin.length();
+				while (length < 4)
 				{
 					output << "0";
 					length++;
 				}
 				output << bin;
-				output << "0000" << endl;
+				
+				output << "111100000000000000000000" << endl;
 			}
 		}else {
 			cout << line << "\n";

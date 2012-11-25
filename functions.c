@@ -18,7 +18,12 @@ void fetch(void)
 
 	printf("                    ");
 	fflush(stdout);
-	printf("\r");
+	if (DEBUG)
+	{
+		printf("\n");
+	} else {
+		printf("\r");
+	}
 	while (scalar < NSCALAR)
 	{
 		nextFetchedInstruction[scalar] = fetchUnit();
@@ -42,7 +47,7 @@ void decode(void)
 		{
 		    nextDecodedInstruction[scalar] = decodeUnit(fetchedInstruction[scalar], decodedEnd, tail);
 		} else {
-		    printf("Nothing to Decode.. ");
+		    printf(" -");
 		}
 		scalar++;
 	}
@@ -58,12 +63,16 @@ void execute(void)
 		if (decodedInstruction[scalar])
 		{
 		    name = operation[strtol(decodedInstruction[scalar]->opcode, &endptr, 2)];
-		    printf("Executing %s.. ", name);
+		    printf(" %s", name);
 		    //printf("%d\n",atoi(decodedInstruction[NSCALAR]->opcode));
 		    executeUnit(decodedInstruction[scalar]);
 		    instructionsExcecuted++;
 		} else {
-		    printf("Nothing to excecute.. ");
+			if(!finished)
+			{
+		    	printf(" -");
+		    }
+		    NOPS++;
 		}
 		scalar++;
 	}
@@ -81,7 +90,10 @@ void cycleClock (void)
     }
     clearPipeline();
 	fflush(stdout);
-    printf("\nClock cycle number %d\n\n", procClock++);
+	if(!finished)
+	{
+    	printf(" Cycle:  %d", procClock++);
+	}
 }
 
 void clearPipeline(void)
@@ -115,7 +127,18 @@ void init( char * argv[] )
 
 	finished = 0;
 	fetchedAll = 0;
+	branchesTaken = 0;
+	predictedCorrect = 0;
+	predictedIncorrect = 0;
+	NOPS = 0;
 
+	if (argv[2])
+	{
+		DEBUG = atoi(argv[2]);
+	} else {
+		printf("No Debug variable\n");
+		exit(EXIT_FAILURE);
+	}
 	//set registers to 0
 	memset(registerBlock.reg,0,NUMREGISTERS);
 	registerBlock.PC = 1;
@@ -243,4 +266,5 @@ void stats(void)
     printf("Clock Cycles:                  %d\n", procClock);
     printf("Clock Cycles per Instruction:  %f\n", ((float)procClock/instructionsExcecuted));
     printf("Instructions per Clock Cycle:  %f\n", ((float)instructionsExcecuted/procClock));
+    printf("NOP's:                         %d\n", NOPS);
 }

@@ -18,11 +18,9 @@ bitStream * fetchUnit(void)
 	tim.tv_nsec = SPEED;
 	nanosleep(&tim , &tim2);
 
-	printf("Fetching.. ");
-
 	if (fetchedAll)
 	{
-		printf("Cannot fetch instruction.. ");
+		printf("    -   ");
 		return NULL;
 	}
 
@@ -31,7 +29,7 @@ bitStream * fetchUnit(void)
 		if (BStemp->next == NULL)
 	 	{
 	 		success = 0;
-	 		printf("Cannot fetch instruction.. ");
+	 		printf("  -  ");
 	 		break;
 	 	}
 		BStemp = BStemp -> next;
@@ -52,7 +50,10 @@ bitStream * fetchUnit(void)
 	
 	if (success)
 	{
+		printf(" F");
 		registerBlock.PC++;
+	} else {
+		printf(" -");
 	}
 
 	// check for END

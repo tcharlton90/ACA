@@ -59,13 +59,13 @@ void executeUnit ( POP *decodedInstruction )
 			break;
 		case 110: //LDR
 			i = decodedInstruction->reg1;
-			j = decodedInstruction->Maddress;
-			registerBlock.reg[i] = memory[j];
+			j = decodedInstruction->op1;
+			registerBlock.reg[i] = memory[registerBlock.reg[j]];
 			break;
 		case 111: //STR
 			i = decodedInstruction->reg1;
 			j = decodedInstruction->Maddress;
-			registerBlock.reg[j] = memory[i];
+			memory[registerBlock.reg[j]] = registerBlock.reg[i];
 			break;
 		case 1000: //B
 			i = decodedInstruction->Maddress;
