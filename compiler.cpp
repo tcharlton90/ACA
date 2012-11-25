@@ -632,7 +632,28 @@ int main (int argc, char *argv[])
 				
 				output << "111100000000000000000000" << endl;
 			}
-		}else {
+		}else if (command == "b"){
+			// append a \n
+			if (line.find("\n") > 1000)
+			{
+				line.append("\n");
+			}
+
+			output << "1000"
+			bin = "";
+			length = (line.find_first_of("\n")-line.find_first_of("r"))-1;
+			sop = line.substr(line.find_first_of("r")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 4)
+			{
+				output << "0";
+				length++;
+			}
+			output << bin << "";
+		} else {
 			cout << line << "\n";
 		}
 		//tmp = strchr(command, ':');

@@ -1,11 +1,19 @@
-31   2827    2423    2019    1615     1211    87       43      0
-|      |       |       |       |       |       |       |       |
- opcode|   Rd  |  Rop1 |  Rop2 |-------------------------------|    Mathematical operations ( ADD, SUB, DIV, MUL)
- opcode|   Rop |                        operand1               |    Data processing (MOV)
- opcode|   Rd  |  Rop  |---------------------------------------|    Data movement (LDR, STR, CMP)
- opcode|   Maddress                            |---------------|    Branch instructions (B, BLT, BE, BGT, JMP, RTN)
 
+VERSION 1
+31    2827    2423    2019    1615     1211    87       43      0
+|       |       |       |       |       |       |       |       |
+ opcode |   Rd  |  Rop1 |  Rop2 |-------------------------------|    Mathematical operations ( ADD, SUB, DIV, MUL)
+ opcode |   Rop |                        operand1               |    Data processing (MOV)
+ opcode |   Rd  |  Rop  |---------------------------------------|    Data movement (LDR, STR, CMP)
+ opcode |   Maddress                            |---------------|    Branch instructions (B, BLT, BE, BGT, JMP, RTN)
 
+VERSION 2
+31      2726    2221    1716    1312     1211    87       43      0
+|        |        |        |        |        |        |        |  |
+ opcode  |   Rd   |   Rop1 |   Rop2 |-----------------------------|    Mathematical operations ( ADD, SUB, DIV, MUL)
+ opcode  |   Rop  |                        operand1               |    Data processing (MOV)
+ opcode  |   Rd   |   Rop  |--------------------------------------|    Data movement (LDR, STR, CMP)
+ opcode  |   Rd   |-----------------------------------------------|    Branch instructions (B, BLT, BE, BGT, JMP, RTN)
 
 0000	ADD dest reg1 reg2
 0001	SUB dest reg1 reg2
