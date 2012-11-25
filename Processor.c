@@ -5,6 +5,7 @@
 // TODO change read-in hack to strcmp
 //	Branch predictor: not right or wrong, predicted taken or predicted not taken
 //	Nice programs
+//	Cant make a read-in super-scaler
 //	Out of order
 //	Register renaming unit
 //	Other features (Rob...)
@@ -35,6 +36,5 @@ int main (int argc, char *argv[])
 		//testinit();
 		//test();
 	}
-	printf("\n\n");
 	return 0;
 }

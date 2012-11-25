@@ -11,6 +11,7 @@ struct POP * head, *temp, *tail;
 int decodedEnd = 0, procClock = 1, instructionsExcecuted = 0;
 char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT","BE","BGT","JMP","RTN","END"};
 
+
 void fetch(void)
 {
 	int scalar = 0;
@@ -21,12 +22,13 @@ void fetch(void)
 	while (scalar < NSCALAR)
 	{
 		nextFetchedInstruction[scalar] = fetchUnit();
-		// if(nextFetchedInstruction[scalar] == NULL)
-		// {
-		// 	break;
-		// }
+		if(nextFetchedInstruction[scalar] == NULL)
+		{
+			break;
+		}
 		scalar++;
 	}
+	//testFetch();
 }
 
 
@@ -163,6 +165,19 @@ void init( char * argv[] )
 	 	}
 	}
 	instNum = 1;
+}
+
+void testFetch(void)
+{
+	int i = 0;
+	while (i < NSCALAR)
+	{
+		if(nextFetchedInstruction[i])
+		{
+			printf("%d, %s\n", nextFetchedInstruction[i] -> address, nextFetchedInstruction[i] -> instruction);
+		}
+		i++;
+	}
 }
 
 void testinit(void)
