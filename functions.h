@@ -2,7 +2,7 @@
 
 #define NUMREGISTERS 16
 #define MEMORYSIZE 4000
-#define SPEED 10000000 //speed is delay in ns
+#define SPEED 5000000 //speed is delay in ns
 #define NSCALAR 4
 
 void fetch(void);
@@ -24,6 +24,8 @@ void testinit(void);
 void test(void);
 
 void stats(void);
+
+void testFetch(void);
 
 typedef struct POP{
 	int instructionAddress;
