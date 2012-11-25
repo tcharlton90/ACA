@@ -1,7 +1,7 @@
 31   2827    2423    2019    1615     1211    87       43      0
 |      |       |       |       |       |       |       |       |
- opcode|   Rd  |  Rop1 |  Rop2 |-------------------------------|    Mathematical operations ( ADD, SUB, DIV, MUL, CMP)
- opcode|   Rop |                        operand1               |    Data processing (MOV)
+ opcode|   Rd  |  Rop1 |  Rop2 |-------------------------------|    Mathematical operations ( ADD, SUB, DIV, MUL)
+ opcode|   Rop |                        operand1               |    Data processing (MOV, CMP)
  opcode|   Rd  |       Maddress                        |-------|    Data movement (LDR, STR)
  opcode|   Maddress                            |---------------|    Branch instructions (B, BLT, BE, BGT, JMP, RTN)
 

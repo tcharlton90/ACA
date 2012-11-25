@@ -80,7 +80,7 @@ int main (int argc, char *argv[])
 		{
 			break;
 		}
-		cout << line << "\n";
+		
 
 		//take out labels
 		position = line.find(":");
@@ -96,7 +96,25 @@ int main (int argc, char *argv[])
 		command = line.substr(0, line.find(" "));
 		if (command == "add")
 		{
+			//Mov constant to r13
+			output << "01011101";
+			// constant
+			bin = "";
+			length = (line.find_last_of("\n")-line.find_last_of("#"))-1;
+			sop = line.substr(line.find_last_of("#")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 24)
+			{
+				output << "0";
+				length++;
+			}
+			output << bin << endl;
+
 			output << "0000";
+			bin = "";
 			length = (line.find_first_of(",")-line.find_first_of("r"))-1;
 			sop = line.substr(line.find_first_of("r")+1, length);
 			//cout << sop << endl;
@@ -123,12 +141,224 @@ int main (int argc, char *argv[])
 				output << "0";
 				length++;
 			}
+			output << bin;
+
+			// constant, ie r13
+			output << "11010000000000000000" << endl;
+
+		} else if (command == "sub")
+		{
+			//Mov constant to r13
+			output << "01011101";
+			// constant
+			bin = "";
+			length = (line.find_last_of("\n")-line.find_last_of("#"))-1;
+			sop = line.substr(line.find_last_of("#")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 24)
+			{
+				output << "0";
+				length++;
+			}
 			output << bin << endl;
 
-			// constant
+			output << "0001";
+			bin = "";
+			length = (line.find_first_of(",")-line.find_first_of("r"))-1;
+			sop = line.substr(line.find_first_of("r")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 4)
+			{
+				output << "0";
+				length++;
+			}
+			output << bin;
 
-		} else {
+			// second reg
+			bin = "";
+			length = (line.find_last_of(",")-line.find_last_of("r"))-1;
+			sop = line.substr(line.find_last_of("r")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 4)
+			{
+				output << "0";
+				length++;
+			}
+			output << bin;
+
+			// constant, ie r13
+			output << "11010000000000000000" << endl;
 				//break;
+		} else if (command == "mul")
+		{
+			output << "0010";
+			bin = "";
+			length = (line.find_first_of(",")-line.find_first_of("r"))-1;
+			sop = line.substr(line.find_first_of("r")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 4)
+			{
+				output << "0";
+				length++;
+			}
+			output << bin;
+
+			// second reg
+			bin = "";
+			length = (line.find_last_of(",")-line.find_last_of("r"))-1;
+			sop = line.substr(line.find_last_of("r")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 4)
+			{
+				output << "0";
+				length++;
+			}
+			output << bin;
+
+			// third reg
+			bin = "";
+			length = 2;//(line.find_last_of(",")-line.find_last_of("r"))-1;
+			sop = line.substr(line.find_last_of("r")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 4)
+			{
+				output << "0";
+				length++;
+			}
+			output << bin << "0000000000000000" << endl;
+
+
+		} else if (command == "mov")
+		{
+			output << "0101";
+			bin = "";
+			length = (line.find_first_of(",")-line.find_first_of("r"))-1;
+			sop = line.substr(line.find_first_of("r")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 4)
+			{
+				output << "0";
+				length++;
+			}
+			output << bin;
+
+			// constant
+			bin = "";
+			length = (line.find_last_of("\n")-line.find_last_of("#"))-1;
+			sop = line.substr(line.find_last_of("#")+1, length);
+			//cout << sop << endl;
+			cop = sop.c_str();
+			binary(atoi(cop));
+			length = bin.length();
+			while (length < 24)
+			{
+				output << "0";
+				length++;
+			}
+			output << bin << endl;
+
+
+		} else if (command == "cmp")
+		{
+			//cout << line << "\n";
+
+			if ( line.find("#") < 1000)
+			{
+				//Mov constant to r13
+				output << "01011101";
+				// constant
+				bin = "";
+				length = (line.find_last_of("\n")-line.find_last_of("#"))-1;
+				sop = line.substr(line.find_last_of("#")+1, length);
+				//cout << sop << endl;
+				cop = sop.c_str();
+				binary(atoi(cop));
+				length = bin.length();
+				while (length < 24)
+				{
+					output << "0";
+					length++;
+				}
+				output << bin << endl;
+
+				//CMP
+				//reg 1
+				output << "0100";
+				bin = "";
+				length = (line.find_first_of(",")-line.find_first_of("r"))-1;
+				sop = line.substr(line.find_first_of("r")+1, length);
+				//cout << sop << endl;
+				cop = sop.c_str();
+				binary(atoi(cop));
+				length = bin.length();
+				while (length < 4)
+				{
+					output << "0";
+					length++;
+				}
+				output << bin;
+
+				// constant
+				// constant, ie r13
+				output << "000000000000000000001101" << endl;
+
+			} else { //register
+
+				// reg 1
+				output << "0100";
+				bin = "";
+				length = (line.find_first_of(",")-line.find_first_of("r"))-1;
+				sop = line.substr(line.find_first_of("r")+1, length);
+				//cout << sop << endl;
+				cop = sop.c_str();
+				binary(atoi(cop));
+				length = bin.length();
+				while (length < 4)
+				{
+					output << "0";
+					length++;
+				}
+				output << bin;
+
+				// reg2
+				bin = "";
+				length = (line.find_last_of("\n")-line.find_last_of("r"))-1;
+				sop = line.substr(line.find_last_of("#")+1, length);
+				//cout << sop << endl;
+				cop = sop.c_str();
+				binary(atoi(cop));
+				length = bin.length();
+				while (length < 24)
+				{
+					output << "0";
+					length++;
+				}
+				output << bin << endl;
+			}
+
+		}else {
+			cout << line << "\n";
 		}
 		//tmp = strchr(command, ':');
 		//printf("%s", tmp);
