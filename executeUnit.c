@@ -117,7 +117,7 @@ void executeUnit ( POP *decodedInstruction )
 			printf("\n");
 			finished = 1;
 			stats();
-			test();
+			//test();
 			break;
 		default:
 			break;
