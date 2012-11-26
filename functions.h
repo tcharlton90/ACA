@@ -3,8 +3,9 @@
 #define NUMREGISTERS 32
 #define MEMORYSIZE 4000
 #define SPEED 5000000 //speed is delay in ns
-#define NSCALAR 4
-
+#ifndef NSCALAR
+    #define NSCALAR 4
+#endif
 void fetch(void);
 
 void decode(void);

@@ -70,7 +70,7 @@ void execute(void)
 		} else {
 			if(!finished)
 			{
-		    	printf(" -");
+		    	printf("  - ");
 		    }
 		    NOPS++;
 		}
