@@ -37,7 +37,7 @@ bitStream * fetchUnit(void)
 	//printf("\n%d - %s\n",BStemp -> address, BStemp -> instruction);
 	
 	// If instruction is a branch
-	if (strncmp("10", BStemp->instruction, 2) == 0)
+	if (strncmp("010", BStemp->instruction, 2) == 0)
 	{
 	    strncpy(Maddress, BStemp->instruction+4, 20);
 	    target = branchPredict(Maddress);
@@ -57,7 +57,7 @@ bitStream * fetchUnit(void)
 	}
 
 	// check for END
-	if (strncmp("1110", BStemp->instruction, 4) == 0)
+	if (strncmp("01110", BStemp->instruction, 4) == 0)
 	{
 		fetchedAll = 1;
 	}
