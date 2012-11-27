@@ -54,6 +54,6 @@ typedef struct bitStream{
 } bitStream;
 
 struct bitStream *BShead , *BStemp, * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
-struct registers registerBlock;
+struct registers *registerBlock, *nextRegisterBlock;
 struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR];
 int finished, fetchedAll, memory[MEMORYSIZE], branchesTaken, predictedCorrect, predictedIncorrect, NOPS, DEBUG;

@@ -24,7 +24,7 @@ bitStream * fetchUnit(void)
 		return NULL;
 	}
 
-	while ( BStemp->address != registerBlock.PC)
+	while ( BStemp->address != registerBlock -> PC)
 	{
 		if (BStemp->next == NULL)
 	 	{
@@ -44,14 +44,14 @@ bitStream * fetchUnit(void)
 	    if (target)
 	    {
 		success = 0;
-		registerBlock.PC = target;
+		registerBlock -> PC = target;
 	    }
 	}
 	
 	if (success)
 	{
 		printf(" F");
-		registerBlock.PC++;
+		registerBlock -> PC++;
 	} else {
 		printf(" -");
 	}

@@ -88,6 +88,7 @@ void cycleClock (void)
     	decodedInstruction[i] = nextDecodedInstruction[i];
     	i++;
     }
+    registerBlock = nextRegisterBlock;
     clearPipeline();
 	fflush(stdout);
 	if(!finished)
@@ -139,12 +140,16 @@ void init( char * argv[] )
 		printf("No Debug variable\n");
 		exit(EXIT_FAILURE);
 	}
+
+	//start registers
+	registerBlock = malloc(sizeof(struct registers));
+	nextRegisterBlock = registerBlock;
 	//set registers to 0
-	memset(registerBlock.reg,0,NUMREGISTERS);
-	registerBlock.PC = 1;
-	registerBlock.FLAG_LT = false;
-	registerBlock.FLAG_E = false;
-	registerBlock.FLAG_GT = false;
+	memset(registerBlock -> reg,0,NUMREGISTERS);
+	registerBlock -> PC = 1;
+	registerBlock -> FLAG_LT = false;
+	registerBlock -> FLAG_E = false;
+	registerBlock -> FLAG_GT = false;
 	
 	//start Memory
 	memset(memory, 0,MEMORYSIZE);
@@ -252,11 +257,11 @@ void test (void)
 
 	while (j < NUMREGISTERS)
 	{
-		i = registerBlock.reg[j];
+		i = registerBlock -> reg[j];
 		printf("%d\n",i);
 		j++;
 	}
-	printf("| LT| E | GT|\n| %d | %d | %d |\n",registerBlock.FLAG_LT,registerBlock.FLAG_E,registerBlock.FLAG_GT);
+	printf("| LT| E | GT|\n| %d | %d | %d |\n",registerBlock -> FLAG_LT,registerBlock -> FLAG_E,registerBlock -> FLAG_GT);
 }
 
 void stats(void)

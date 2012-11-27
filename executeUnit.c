@@ -8,46 +8,44 @@ void executeUnit ( POP *decodedInstruction )
 	switch(atoi(decodedInstruction->opcode)){
 		case 0: //ADD
 			j = decodedInstruction->reg1;
-			i = registerBlock.reg[decodedInstruction->op1];
-			k = registerBlock.reg[decodedInstruction->op2];
-			registerBlock.reg[j] = i + k;
-			//printf("ADD: %d, %d, %d\n", registerBlock.reg[j], i, k);
+			i = decodedInstruction->op1;
+			k = decodedInstruction->op2;
+			nextRegisterBlock -> reg[j] = i + k;
+			//printf("ADD: %d, %d, %d\n", registerBlock -> reg[j], i, k);
 			break;
 		case 1: //SUB
 			j = decodedInstruction->reg1;
-			i = registerBlock.reg[decodedInstruction->op1];
-			k = registerBlock.reg[decodedInstruction->op2];
-			registerBlock.reg[j] = i - k;
+			i = decodedInstruction->op1;
+			k = decodedInstruction->op2;
+			nextRegisterBlock -> reg[j] = i - k;
 			break;
 		case 10: //MUL
 			j = decodedInstruction->reg1;
-			i = registerBlock.reg[decodedInstruction->op1];
-			k = registerBlock.reg[decodedInstruction->op2];
-			registerBlock.reg[j] = i * k;
+			i = decodedInstruction->op1;
+			k = decodedInstruction->op2;
+			nextRegisterBlock -> reg[j] = i * k;
 			break;
 		case 11: //DIV
 			j = decodedInstruction->reg1;
-			i = registerBlock.reg[decodedInstruction->op1];
-			k = registerBlock.reg[decodedInstruction->op2];
-			registerBlock.reg[j] = i / k;
+			i = decodedInstruction->op1;
+			k = decodedInstruction->op2;
+			nextRegisterBlock -> reg[j] = i / k;
 			break;
 		case 100: //CMP
-			l = decodedInstruction->reg1;
-			j = registerBlock.reg[l];
-			i = decodedInstruction->op1;
-			k = registerBlock.reg[i];
+			j = decodedInstruction->op1;
+			k = decodedInstruction->op2;
 			//printf ("%d cmp %d\n",j,i);
 			if (j > k)
 			{
-				registerBlock.FLAG_GT = true;
+				nextRegisterBlock -> FLAG_GT = true;
 				//printf("%d,%d\n",j , k);
 			} else if ( j == k)
 			{
-				registerBlock.FLAG_E = true;
+				nextRegisterBlock -> FLAG_E = true;
 				//printf("%d,%d\n",j , k);
 			} else if ( j < k)
 			{
-				registerBlock.FLAG_LT = true;
+				nextRegisterBlock -> FLAG_LT = true;
 				//printf("%d,%d\n",j , k);
 			}
 			break;
@@ -55,56 +53,56 @@ void executeUnit ( POP *decodedInstruction )
 			//printf("moving %d to register %d\n", decodedInstruction->op1, decodedInstruction->reg1);
 			i = decodedInstruction->op1;
 			j = decodedInstruction->reg1;
-			registerBlock.reg[j] = i;
+			nextRegisterBlock -> reg[j] = i;
 			break;
 		case 110: //LDR
 			i = decodedInstruction->reg1;
 			j = decodedInstruction->op1;
-			registerBlock.reg[i] = memory[registerBlock.reg[j]];
+			nextRegisterBlock -> reg[i] = memory[registerBlock -> reg[j]];
 			break;
 		case 111: //STR
 			i = decodedInstruction->reg1;
 			j = decodedInstruction->Maddress;
-			memory[registerBlock.reg[j]] = registerBlock.reg[i];
+			memory[j] = i;
 			break;
 		case 1000: //B
 			i = decodedInstruction->Maddress;
-			registerBlock.PC = i;
+			nextRegisterBlock -> PC = i;
 			clearPipeline();
 			//clearInstructionIssue();
 			//printf("%d\n",i);
 			break;
 		case 1001: //BLT
 			i = decodedInstruction->Maddress;
-			if (registerBlock.FLAG_LT)
+			if (registerBlock -> FLAG_LT)
 			{
-				//registerBlock.PC = i;
-				registerBlock.FLAG_LT = false;
+				//registerBlock -> PC = i;
+				nextRegisterBlock -> FLAG_LT = false;
 			} else {
 				//branch prediction got it wrong
 				clearPipeline();
 				clearInstructionIssue();
-				registerBlock.PC = decodedInstruction->instructionAddress+1;
-				registerBlock.FLAG_LT = false;
+				nextRegisterBlock -> PC = decodedInstruction->instructionAddress+1;
+				nextRegisterBlock -> FLAG_LT = false;
 			}
 			//printf("%d\n",i);
 			break;
 		case 1010: //BE
 			i = decodedInstruction->Maddress;
-			if (registerBlock.FLAG_E)
+			if (registerBlock -> FLAG_E)
 			{
-				registerBlock.PC = i;
-				registerBlock.FLAG_E = false;
+				nextRegisterBlock -> PC = i;
+				nextRegisterBlock -> FLAG_E = false;
 				clearPipeline();
 			}
 			//printf("%d\n",i);
 			break;
 		case 1011: //BGT
 			i = decodedInstruction->Maddress;
-			if (registerBlock.FLAG_GT)
+			if (registerBlock -> FLAG_GT)
 			{
-				registerBlock.PC = i;
-				registerBlock.FLAG_GT = false;
+				nextRegisterBlock -> PC = i;
+				nextRegisterBlock -> FLAG_GT = false;
 				clearPipeline();
 			}
 			//printf("%d\n",i);
