@@ -40,7 +40,7 @@ bitStream * fetchUnit(void)
 	if (strncmp("010", BStemp->instruction, 3) == 0)
 	{
 	    strncpy(reg, BStemp->instruction+4, 4);
-	    target = branchPredict(reg);
+	    target = branchPredict(atoi(reg));
 	    if (target)
 	    {
 		success = 0;

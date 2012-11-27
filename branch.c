@@ -3,7 +3,7 @@
 #include "stdlib.h"
 #include "functions.h"
 
-int branchPredict(char * reg)
+int branchPredict(int reg)
 {
     int address;
     
