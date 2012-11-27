@@ -10,7 +10,7 @@ struct timespec tim, tim2;
 bitStream * fetchUnit(void)
 {
 	int success = 1, target = 0;
-	char Maddress[20];
+	char reg[4];
 
 	BStemp = BShead;
 
@@ -20,7 +20,7 @@ bitStream * fetchUnit(void)
 
 	if (fetchedAll)
 	{
-		printf("    -   ");
+		printf(" -");
 		return NULL;
 	}
 
@@ -29,7 +29,7 @@ bitStream * fetchUnit(void)
 		if (BStemp->next == NULL)
 	 	{
 	 		success = 0;
-	 		printf("  -  ");
+	 		printf(" -");
 	 		break;
 	 	}
 		BStemp = BStemp -> next;
@@ -37,10 +37,10 @@ bitStream * fetchUnit(void)
 	//printf("\n%d - %s\n",BStemp -> address, BStemp -> instruction);
 	
 	// If instruction is a branch
-	if (strncmp("010", BStemp->instruction, 2) == 0)
+	if (strncmp("010", BStemp->instruction, 3) == 0)
 	{
-	    strncpy(Maddress, BStemp->instruction+4, 20);
-	    target = branchPredict(Maddress);
+	    strncpy(reg, BStemp->instruction+4, 4);
+	    target = branchPredict(reg);
 	    if (target)
 	    {
 		success = 0;
@@ -57,7 +57,7 @@ bitStream * fetchUnit(void)
 	}
 
 	// check for END
-	if (strncmp("01110", BStemp->instruction, 4) == 0)
+	if (strncmp("01110", BStemp->instruction, 5) == 0)
 	{
 		fetchedAll = 1;
 	}

@@ -6,7 +6,7 @@
 POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 {
 	int op, instructionNumber;
-	char twotwobitop[24], fivebitop[5], twozerobitop[20], * operand = malloc((sizeof(char)*32)), * endptr;
+	char twotwobitop[24], fivebitop[5], * operand = malloc((sizeof(char)*32)), * endptr;
 	struct POP * decodedInstruction, *temp;
 	
 	printf(" D");

@@ -3,11 +3,10 @@
 #include "stdlib.h"
 #include "functions.h"
 
-int branchPredict(char * Maddress)
+int branchPredict(char * reg)
 {
-    char * endptr;
     int address;
     
-    address = strtol(Maddress, &endptr, 2);
+    address = registerBlock.reg[reg];
     return address;
 } 

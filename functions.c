@@ -180,7 +180,7 @@ void init( char * argv[] )
 
 		BStail = BStemp;
 
-		if (!strncmp(operand, "1110", 4))
+		if (!strncmp(operand, "01110", 5))
 	 	{
 	 		printf("...program loaded.\n");
 	 		fclose(program);
