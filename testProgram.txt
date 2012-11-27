@@ -7,6 +7,7 @@ answer should be 1275 (10011111011) */
 		MOV r3 #51
 loop	ADD r0 r0 r1
 		ADD r1 r1 r2
+		MOV //doesnt really matter
 		CMP r1 r3
 		BLT loop
 		END
