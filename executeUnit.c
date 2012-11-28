@@ -73,9 +73,14 @@ void executeUnit ( POP *decodedInstruction )
 			//printf("%d\n",i);
 			break;
 		case 1001: //BLT
+<<<<<<< HEAD
 		    
 			i = registerBlock.reg[decodedInstruction->op1];
 			if (registerBlock.FLAG_LT)
+=======
+			i = decodedInstruction->Maddress;
+			if (registerBlock -> FLAG_LT)
+>>>>>>> ae7e717a54f1c2d1cd4735fc110eb252fdaf9e8c
 			{
 				//registerBlock -> PC = i;
 				nextRegisterBlock -> FLAG_LT = false;

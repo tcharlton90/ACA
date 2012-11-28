@@ -159,7 +159,11 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		temp -> opcode = "00100";
 
 		temp -> instructionAddress = instructionNumber;
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> ae7e717a54f1c2d1cd4735fc110eb252fdaf9e8c
 		temp -> reg1 = 0;
 
 		strncpy(twofourbitop,operand+8,24);
