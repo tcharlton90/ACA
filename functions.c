@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+#include "ctype.h"
 #include "functions.h"
 #include "fetchUnit.h"
 #include "decodeUnit.h"
@@ -39,13 +40,30 @@ void fetch(void)
 
 void decode(void)
 {
-	int scalar = 0;
+	int scalar = 0, i = 0;
+	POP * tmp;
 
 	while (scalar < NSCALAR)
 	{
 		if (fetchedInstruction[scalar])
 		{
-		    nextDecodedInstruction[scalar] = decodeUnit(fetchedInstruction[scalar], decodedEnd, tail);
+			tmp = decodeUnit(fetchedInstruction[scalar], decodedEnd, tail);
+			if (tmp -> opcode == "2")
+			{
+				// opcode '2' means that nothing was decoded, 
+				// registers are in use
+				// scan for an instuction
+				while(i < NSCALAR)
+				{
+					if (issueBuffer[i]->next != NULL)
+					{
+						//nextDecodedInstuction[scalar] = issue
+					}
+					i++;
+				}
+			} else {
+		    	nextDecodedInstruction[scalar] = tmp;
+		    }
 		} else {
 		    printf(" -");
 		}
@@ -121,7 +139,7 @@ void clearInstructionIssue(void)
 
 void init( char * argv[] )
 {
-	char * operand = malloc((sizeof(char)*32));
+	char * operand = malloc(sizeof(char)*32);
 	int instNum = 1;	
 	struct bitStream *BStail;
 
@@ -132,6 +150,9 @@ void init( char * argv[] )
 	predictedIncorrect = 0;
 	NOPS = 0;
 
+	//start the issueBuffer
+	memset(issueBuffer, 0, NSCALAR); 
+
 	if (argv[2])
 	{
 		DEBUG = atoi(argv[2]);
@@ -139,6 +160,7 @@ void init( char * argv[] )
 		printf("No Debug variable\n");
 		exit(EXIT_FAILURE);
 	}
+
 	//set registers to 0
 	memset(registerBlock.reg,0,NUMREGISTERS);
 	registerBlock.PC = 1;
@@ -157,7 +179,6 @@ void init( char * argv[] )
 		printf("%s is not a recognised program!\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
-	
 
 	// sort out some structs to hold the program (linked lists)
 	head = malloc(sizeof(struct POP));
@@ -233,10 +254,6 @@ void testinit(void)
 		if (temp -> op2 >= 0)
 		{
 			printf("operand 2: %d\n", temp -> op2);
-		}
-		if (temp -> Maddress > 0)
-		{
-			printf("Memory Adress: %d\n", temp -> Maddress);
 		}
 		if (temp -> next == NULL)
 		{

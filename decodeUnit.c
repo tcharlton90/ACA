@@ -5,7 +5,7 @@
 
 POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 {
-	int op, instructionNumber;
+	int op, opa, opb, opc, instructionNumber;
 	char twotwobitop[24], fivebitop[5], * operand = malloc((sizeof(char)*32)), * endptr;
 	struct POP * decodedInstruction, *temp;
 	
@@ -13,30 +13,41 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 	operand = fetchedInstruction->instruction;
 	instructionNumber = fetchedInstruction->address;
+	temp = malloc(sizeof(struct POP));
+	temp -> opcode = "2";
 
 	if(!strncmp(operand, "00000", 5))
 	{
 		//printf("found ADD\n");
+		strncpy(fivebitop,operand+5,5);
+		opa = strtol(fivebitop, &endptr, 2);
 
-		temp = malloc(sizeof(struct POP));
+		strncpy(fivebitop,operand+10,5);
+		opb = strtol(fivebitop, &endptr, 2);
+
+		strncpy(fivebitop,operand+15,5);
+		opc = strtol(fivebitop, &endptr, 2);
+
+		if (registerBlock.scoreBoard[opa] || registerBlock.scoreBoard[opb] || registerBlock.scoreBoard[opc] )
+		{
+			return temp;
+		} else {
+			registerBlock.scoreBoard[opa] = 1;
+			registerBlock.scoreBoard[opb] = 1;
+			registerBlock.scoreBoard[opc] = 1;
+		}
 
 		temp -> opcode = "00000";
 
 		temp -> instructionAddress = instructionNumber;
 
-		strncpy(fivebitop,operand+5,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> reg1 = op;
+		temp -> reg1 = opa;
 
-		strncpy(fivebitop,operand+10,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op1 = op;
+		temp -> op1 = opb;
 
-		strncpy(fivebitop,operand+15,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op2 = op;
+		temp -> op2 = opc;
 
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -52,25 +63,26 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found SUB\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "00001";
 
 		temp -> instructionAddress = instructionNumber;
 
 		strncpy(fivebitop,operand+5,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
 		strncpy(fivebitop,operand+10,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> op1 = op;
 
 		strncpy(fivebitop,operand+15,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> op2 = op;
 
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -86,25 +98,26 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found MUL\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "00010";
 
 		temp -> instructionAddress = instructionNumber;
 		
 		strncpy(fivebitop,operand+5,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
 		strncpy(fivebitop,operand+10,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> op1 = op;
 
 		strncpy(fivebitop,operand+15,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> op2 = op;
 
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -120,25 +133,26 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found DIV\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "00011";
 
 		temp -> instructionAddress = instructionNumber;
 		
 		strncpy(fivebitop,operand+5,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
 		strncpy(fivebitop,operand+10,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> op1 = op;
 
 		strncpy(fivebitop,operand+15,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> op2 = op;
 
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -153,8 +167,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	} else if (!strncmp(operand, "00100", 5))
 	{
 		//printf("found CMP\n");
-
-		temp = malloc(sizeof(struct POP));
 		
 		temp -> opcode = "00100";
 
@@ -162,15 +174,17 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		
 		strncpy(fivebitop,operand+5,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
 		strncpy(fivebitop,operand+10,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> op1 = op;
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -184,23 +198,22 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found MOV\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "00101";
 
 		temp -> instructionAddress = instructionNumber;
 		
 		strncpy(fivebitop,operand+5,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
 		strncpy(twotwobitop,operand+10,22);
 		op = strtol(twotwobitop, &endptr, 2);
 		temp -> op1 = op;
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -214,7 +227,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		//printf("found LDR\n");
 		// destination 4 -8 
 		//memory address 8 - 28
-		temp = malloc(sizeof(struct POP));
 
 		temp -> opcode = "00110";
 
@@ -222,15 +234,17 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		
 		strncpy(fivebitop,operand+5,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
 		strncpy(fivebitop, operand+ 10,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> op1 = op;
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 		
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 		
 		temp -> next = NULL;
 
@@ -240,8 +254,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	} else if (!strncmp(operand, "00111", 5))
 	{
 		//printf("found STR\n");
-		
-		temp = malloc(sizeof(struct POP));
 
 		temp -> opcode = "00111";
 
@@ -249,15 +261,17 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		
 		strncpy(fivebitop,operand+5,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
 		strncpy(fivebitop, operand+ 10,5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> op1 = op;
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 		
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 		
 		temp -> next = NULL;
 
@@ -267,21 +281,20 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found B\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "01000";
 
 		temp -> instructionAddress = instructionNumber;
 
 		strncpy(fivebitop, operand+5, 5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
-		temp -> op1 = 0;
+		temp -> op1 = (-1);
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 		
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 		//printf("Maddress op: %d\n", op);
 
 		temp -> next = NULL;
@@ -294,21 +307,20 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found BLT\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "01001";
 
 		temp -> instructionAddress = instructionNumber;
 
 		strncpy(fivebitop, operand+5, 5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
-		temp -> op1 = 0;
+		temp -> op1 = (-1);
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 		
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 		//printf("Maddress op: %d\n", op);
 
 		temp -> next = NULL;
@@ -321,21 +333,20 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found BE\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "01010";
 
 		temp -> instructionAddress = instructionNumber;
 
 		strncpy(fivebitop, operand+5, 5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
-		temp -> op1 = 0;
+		temp -> op1 = (-1);
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 		
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -347,21 +358,20 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found BGT\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "01011";
 
 		temp -> instructionAddress = instructionNumber;
 
 		strncpy(fivebitop, operand+5, 5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
-		temp -> op1 = 0;
+		temp -> op1 = (-1);
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 		
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -373,21 +383,20 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found JMP\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "01100";
 
 		temp -> instructionAddress = instructionNumber;
 
 		strncpy(fivebitop, operand+5, 5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
-		temp -> op1 = 0;
+		temp -> op1 = (-1);
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 		
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -399,21 +408,20 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 	{
 		//printf("found RTN\n");
 
-		temp = malloc(sizeof(struct POP));
-
 		temp -> opcode = "01101";
 
 		temp -> instructionAddress = instructionNumber;
 
 		strncpy(fivebitop, operand+5, 5);
 		op = strtol(fivebitop, &endptr, 2);
+		registerBlock.scoreBoard[op] = 1;
 		temp -> reg1 = op;
 
-		temp -> op1 = 0;
+		temp -> op1 = (-1);
 		
-		temp -> op2 = 0;
+		temp -> op2 = (-1);
 		
-		temp -> Maddress = 0;
+		temp -> Maddress = (-1);
 
 		temp -> next = NULL;
 
@@ -427,19 +435,18 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		{
 			printf("Nothing to decode\n");
 		} else {
-			temp = malloc(sizeof(struct POP));
 			
 			temp -> opcode = "01110";
 
 			temp -> instructionAddress = instructionNumber;
 			
-			temp -> reg1 = 0;
+			temp -> reg1 = (-1);
 
-			temp -> op1 = 0;
+			temp -> op1 = (-1);
 			
-			temp -> op2 = 0;
+			temp -> op2 = (-1);
 
-			temp -> Maddress = 0;
+			temp -> Maddress = (-1);
 
 			temp -> next = NULL;
 

@@ -28,13 +28,15 @@ void stats(void);
 
 void testFetch(void);
 
+void issue(void);
+
 typedef struct POP{
-	int instructionAddress;
-	char * opcode;
-	int reg1;
-	int op1;
-	int op2;
-	int Maddress;
+	int instructionAddress;		// def
+	char * opcode;				// def
+	int reg1;					// def
+	int op1;					// optional
+	int op2;					// optional
+	int Blocked;				// optional
 	struct POP *next;
 } POP;
 
@@ -54,7 +56,7 @@ typedef struct bitStream{
 	struct bitStream *next;
 } bitStream;
 
-struct bitStream *BShead , *BStemp, * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
+struct bitStream issueBuffer[NSCALAR], *BShead , *BStemp, * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
 struct registers registerBlock;
 struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR];
 int finished, fetchedAll, memory[MEMORYSIZE], branchesTaken, predictedCorrect, predictedIncorrect, NOPS, DEBUG;
