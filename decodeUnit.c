@@ -28,13 +28,13 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		op = strtol(fivebitop, &endptr, 2);
 		temp -> reg1 = op;
 
-		strncpy(fivebitop,operand+10,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op1 = op;
+		strncpy(fourbitop,operand+8,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op1 = registerBlock -> reg[op];
 
-		strncpy(fivebitop,operand+15,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op2 = op;
+		strncpy(fourbitop,operand+12,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op2 = registerBlock -> reg[op];
 
 		temp -> Maddress = 0;
 
@@ -62,13 +62,13 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		op = strtol(fivebitop, &endptr, 2);
 		temp -> reg1 = op;
 
-		strncpy(fivebitop,operand+10,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op1 = op;
+		strncpy(fourbitop,operand+8,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op1 = registerBlock -> reg[op];
 
-		strncpy(fivebitop,operand+15,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op2 = op;
+		strncpy(fourbitop,operand+12,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op2 = registerBlock -> reg[op];
 
 		temp -> Maddress = 0;
 
@@ -96,13 +96,13 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		op = strtol(fivebitop, &endptr, 2);
 		temp -> reg1 = op;
 
-		strncpy(fivebitop,operand+10,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op1 = op;
+		strncpy(fourbitop,operand+8,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op1 = registerBlock -> reg[op];
 
-		strncpy(fivebitop,operand+15,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op2 = op;
+		strncpy(fourbitop,operand+12,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op2 = registerBlock -> reg[op];
 
 		temp -> Maddress = 0;
 
@@ -130,13 +130,13 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		op = strtol(fivebitop, &endptr, 2);
 		temp -> reg1 = op;
 
-		strncpy(fivebitop,operand+10,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op1 = op;
+		strncpy(fourbitop,operand+8,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op1 = registerBlock -> reg[op];
 
-		strncpy(fivebitop,operand+15,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op2 = op;
+		strncpy(fourbitop,operand+12,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op2 = registerBlock -> reg[op];
 
 		temp -> Maddress = 0;
 
@@ -159,16 +159,16 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		temp -> opcode = "00100";
 
 		temp -> instructionAddress = instructionNumber;
-		
-		strncpy(fivebitop,operand+5,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> reg1 = op;
 
-		strncpy(fivebitop,operand+10,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op1 = op;
+		temp -> reg1 = 0;
+
+		strncpy(twofourbitop,operand+8,24);
+		op = strtol(twofourbitop, &endptr, 2);
+		temp -> op1 = registerBlock -> reg[op];
 		
-		temp -> op2 = 0;
+		strncpy(fourbitop,operand+4,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op2 = registerBlock -> reg[op];
 
 		temp -> Maddress = 0;
 
@@ -220,13 +220,13 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		temp -> instructionAddress = instructionNumber;
 		
-		strncpy(fivebitop,operand+5,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> reg1 = op;
+		strncpy(fourbitop,operand+4,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> reg1 = registerBlock -> reg[op];
 
-		strncpy(fivebitop, operand+ 10,5);
-		op = strtol(fivebitop, &endptr, 2);
-		temp -> op1 = op;
+		strncpy(fourbitop, operand+ 8,4);
+		op = strtol(fourbitop, &endptr, 2);
+		temp -> op1 = registerBlock -> reg[op];
 		
 		temp -> op2 = 0;
 		
