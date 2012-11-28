@@ -27,6 +27,8 @@ void stats(void);
 
 void testFetch(void);
 
+void testDecode(void);
+
 typedef struct POP{
 	int instructionAddress;
 	char * opcode;

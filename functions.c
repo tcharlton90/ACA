@@ -51,6 +51,7 @@ void decode(void)
 		}
 		scalar++;
 	}
+	testDecode();
 }
 
 void execute(void)
@@ -203,6 +204,20 @@ void testFetch(void)
 		if(nextFetchedInstruction[i])
 		{
 			printf("%d, %s\n", nextFetchedInstruction[i] -> address, nextFetchedInstruction[i] -> instruction);
+		}
+		i++;
+	}
+}
+
+void testDecode(void)
+{
+	int i = 0;
+	printf("\n");
+	while (i < NSCALAR)
+	{
+		if(nextDecodedInstruction[i])
+		{
+			printf("%d, %s, %d, %d, %d, %d\n", nextDecodedInstruction[i] -> instructionAddress, nextDecodedInstruction[i] -> opcode, nextDecodedInstruction[i] -> reg1, nextDecodedInstruction[i] -> op1, nextDecodedInstruction[i] ->op2, nextDecodedInstruction[i] -> Maddress );
 		}
 		i++;
 	}
