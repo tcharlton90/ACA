@@ -1,5 +1,5 @@
 CC = gcc
-flags = -Wall
+flags = -Wall -g
 output = out.o
 others = functions.c executeUnit.c decodeUnit.c branch.c fetchUnit.c
 

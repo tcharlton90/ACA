@@ -10,7 +10,7 @@
 FILE * program;
 struct POP * head, *temp, *tail;
 int decodedEnd = 0, procClock = 1, instructionsExcecuted = 0;
-char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT","BE","BGT","JMP","RTN","END"};
+char * operation[] =  {"ADD","SUB","MUL","DIV","CMP","MOV","LDR","STR","B","BLT","BE","BGT","JMP","RTN","END","NOP"};
 
 
 void fetch(void)
@@ -19,7 +19,7 @@ void fetch(void)
 
 	printf("                    ");
 	fflush(stdout);
-	if (DEBUG)
+	if (VERBOSE)
 	{
 		printf("\n");
 	} else {
@@ -34,33 +34,29 @@ void fetch(void)
 		}
 		scalar++;
 	}
-	//testFetch();
+	(DEBUG) ? testFetch() : NULL;
 }
 
 
 void decode(void)
 {
-	int scalar = 0, i = 0;
-	POP * tmp;
+	int scalar = 0;
+	struct POP * tmp;
 
 	while (scalar < NSCALAR)
 	{
 		if (fetchedInstruction[scalar])
 		{
 			tmp = decodeUnit(fetchedInstruction[scalar], decodedEnd, tail);
-			if (tmp -> opcode == "2")
+			if (dependancies)
 			{
-				// opcode '2' means that nothing was decoded, 
 				// registers are in use
-				// scan for an instuction
-				while(i < NSCALAR)
-				{
-					if (issueBuffer[i]->next != NULL)
-					{
-						//nextDecodedInstuction[scalar] = issue
-					}
-					i++;
-				}
+				// scan for an instuction to replace it
+				// then add the decoded instruciton to the buffer
+				// TODO: make sure it goes first, and everything else is delayed
+				dependancies = 0;
+				nextDecodedInstruction[scalar] = getIssueBuffer();
+				setIssueBuffer(tmp);
 			} else {
 		    	nextDecodedInstruction[scalar] = tmp;
 		    }
@@ -69,26 +65,27 @@ void decode(void)
 		}
 		scalar++;
 	}
+	(DEBUG) ? testDecode() : NULL;
 }
 
 void execute(void)
 {
 	char * name, * endptr;
-	int scalar = 0;
+	int scalar = 0, i;
 
 	while (scalar < NSCALAR)
 	{
 		if (decodedInstruction[scalar])
 		{
-		    name = operation[strtol(decodedInstruction[scalar]->opcode, &endptr, 2)];
+			i = strtol(decodedInstruction[scalar]->opcode, &endptr, 2);
+		    name = operation[i];
 		    printf(" %s", name);
-		    //printf("%d\n",atoi(decodedInstruction[NSCALAR]->opcode));
 		    executeUnit(decodedInstruction[scalar]);
 		    instructionsExcecuted++;
 		} else {
 			if(!finished)
 			{
-		    	printf("  - ");
+		    	printf(" NOP");
 		    }
 		    NOPS++;
 		}
@@ -106,7 +103,9 @@ void cycleClock (void)
     	decodedInstruction[i] = nextDecodedInstruction[i];
     	i++;
     }
+    registerBlock = nextRegisterBlock;
     clearPipeline();
+	testIssue();
 	fflush(stdout);
 	if(!finished)
 	{
@@ -137,21 +136,63 @@ void clearInstructionIssue(void)
 	}
 }
 
+POP * getIssueBuffer (void)
+{
+	POP * tmp;
+
+	if (!issueBufferHead)
+	{
+		tmp = malloc(sizeof(struct POP));
+		tmp -> opcode = "01111";
+		//printf("given dummy ");
+		return tmp;
+	}
+	//printf("Not given Dummy");
+	tmp = issueBufferHead -> instructionForIssue;
+	issueBufferHead = issueBufferHead -> next;
+	return tmp;
+}
+
+void setIssueBuffer(POP * toAdd)
+{
+	struct issueBuffer * buf, * tmp;
+
+	//printf("---------------------------------%d\n", issueBufferHead -> i);
+	//fflush(stdout);
+
+	tmp = malloc(sizeof(struct issueBuffer));
+	buf = issueBufferHead;
+	while (buf->next != NULL)
+	{
+		buf = buf -> next;
+	}
+	tmp -> instructionForIssue = toAdd;
+	tmp -> next = NULL;
+	buf -> next = tmp;
+}
+
 void init( char * argv[] )
 {
 	char * operand = malloc(sizeof(char)*32);
 	int instNum = 1;	
 	struct bitStream *BStail;
+	struct issueBuffer *tmp;
 
 	finished = 0;
 	fetchedAll = 0;
+	dependancies = 0;
 	branchesTaken = 0;
 	predictedCorrect = 0;
 	predictedIncorrect = 0;
 	NOPS = 0;
 
 	//start the issueBuffer
-	memset(issueBuffer, 0, NSCALAR); 
+	tmp = malloc(sizeof(struct issueBuffer));
+	issueBufferHead = malloc(sizeof(struct issueBuffer));
+	issueBufferHead -> instructionForIssue = malloc(sizeof(struct POP));
+	issueBufferHead -> instructionForIssue -> opcode = "01111";
+	issueBufferHead -> next = tmp;
+	//printf("%s, %s\n", issueBufferHead -> instructionForIssue -> opcode, issueBufferHead -> next);
 
 	if (argv[2])
 	{
@@ -160,13 +201,22 @@ void init( char * argv[] )
 		printf("No Debug variable\n");
 		exit(EXIT_FAILURE);
 	}
+	if (argv[3])
+	{
+		VERBOSE = 1;
+	} else {
+		VERBOSE = 0;
+	}
 
+	//start registers
+	registerBlock = malloc(sizeof(struct registers));
+	nextRegisterBlock = registerBlock;
 	//set registers to 0
-	memset(registerBlock.reg,0,NUMREGISTERS);
-	registerBlock.PC = 1;
-	registerBlock.FLAG_LT = false;
-	registerBlock.FLAG_E = false;
-	registerBlock.FLAG_GT = false;
+	memset(registerBlock -> reg,0,NUMREGISTERS);
+	registerBlock -> PC = 1;
+	registerBlock -> FLAG_LT = false;
+	registerBlock -> FLAG_E = false;
+	registerBlock -> FLAG_GT = false;
 	
 	//start Memory
 	memset(memory, 0,MEMORYSIZE);
@@ -214,6 +264,7 @@ void init( char * argv[] )
 void testFetch(void)
 {
 	int i = 0;
+	printf("\n");
 	while (i < NSCALAR)
 	{
 		if(nextFetchedInstruction[i])
@@ -221,6 +272,33 @@ void testFetch(void)
 			printf("%d, %s\n", nextFetchedInstruction[i] -> address, nextFetchedInstruction[i] -> instruction);
 		}
 		i++;
+	}
+}
+
+void testDecode(void)
+{
+	int i = 0;
+	printf("\n");
+	while (i < NSCALAR)
+	{
+		if(nextDecodedInstruction[i] != NULL);
+		{
+			//printf("%s\n", nextDecodedInstruction[i] -> opcode);
+			fflush(stdout);
+		}
+		i++;
+	}
+}
+
+void testIssue (void)
+{
+	struct issueBuffer * tmp;
+	tmp = issueBufferHead;
+	printf("\n");
+	while (tmp -> next != NULL)
+	{
+		printf("%s\n", tmp -> instructionForIssue -> opcode);
+		tmp = tmp -> next;
 	}
 }
 
@@ -269,11 +347,11 @@ void test (void)
 
 	while (j < NUMREGISTERS)
 	{
-		i = registerBlock.reg[j];
+		i = registerBlock -> reg[j];
 		printf("%d\n",i);
 		j++;
 	}
-	printf("| LT| E | GT|\n| %d | %d | %d |\n",registerBlock.FLAG_LT,registerBlock.FLAG_E,registerBlock.FLAG_GT);
+	printf("| LT| E | GT|\n| %d | %d | %d |\n",registerBlock -> FLAG_LT,registerBlock -> FLAG_E,registerBlock -> FLAG_GT);
 }
 
 void stats(void)

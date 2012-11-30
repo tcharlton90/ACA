@@ -6,6 +6,7 @@
 #ifndef NSCALAR
     #define NSCALAR 4
 #endif
+
 void fetch(void);
 
 void decode(void);
@@ -28,7 +29,11 @@ void stats(void);
 
 void testFetch(void);
 
+void testDecode(void);
+
 void issue(void);
+
+void testIssue(void);
 
 typedef struct POP{
 	int instructionAddress;		// def
@@ -36,7 +41,6 @@ typedef struct POP{
 	int reg1;					// def
 	int op1;					// optional
 	int op2;					// optional
-	int Blocked;				// optional
 	struct POP *next;
 } POP;
 
@@ -56,7 +60,17 @@ typedef struct bitStream{
 	struct bitStream *next;
 } bitStream;
 
-struct bitStream issueBuffer[NSCALAR], *BShead , *BStemp, * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
-struct registers registerBlock;
+typedef struct issueBuffer{
+	struct POP * instructionForIssue;
+	struct issueBuffer * next;
+} issueBuffer;
+
+POP * getIssueBuffer (void);
+
+void setIssueBuffer(POP * toAdd);
+
+struct bitStream *BShead , *BStemp, * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
+struct registers *registerBlock, *nextRegisterBlock;
 struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR];
-int finished, fetchedAll, memory[MEMORYSIZE], branchesTaken, predictedCorrect, predictedIncorrect, NOPS, DEBUG;
+int finished, fetchedAll, memory[MEMORYSIZE], dependancies, branchesTaken, predictedCorrect, predictedIncorrect, NOPS, DEBUG, VERBOSE;
+struct issueBuffer * issueBufferHead;

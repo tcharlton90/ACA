@@ -7,6 +7,6 @@ int branchPredict(int reg)
 {
     int address;
     
-    address = registerBlock.reg[reg];
+    address = registerBlock -> reg[reg];
     return address;
 } 
