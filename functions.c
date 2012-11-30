@@ -40,31 +40,56 @@ void fetch(void)
 
 void decode(void)
 {
-	int scalar = 0;
+	int scalar = 0, count = 0; // scalar is number already added to decoded, count is fetched instructions decoded
 	struct POP * tmp;
 
-	while (scalar < NSCALAR)
+        tmp = getIssueBuffer();
+        // while the issue buffer is not a NOP
+        while (strcmp(tmp -> opcode,  "01111") != 0 )
+        {
+            // give to excecute
+            nextDecodedInstruction[scalar] = tmp;
+            scalar++;
+            tmp = getIssueBuffer();
+        }
+
+        // while there is still space in decoded
+	while ((scalar < NSCALAR) && (count < NSCALAR))
 	{
-		if (fetchedInstruction[scalar])
+		if (fetchedInstruction[count])
 		{
-			tmp = decodeUnit(fetchedInstruction[scalar], decodedEnd, tail);
+                        // if theres something to fetch, fetch it
+                       // printf("top: count: %d, %s\n", count, fetchedInstruction[count]->instruction);
+                        fflush(stdout);
+			tmp = decodeUnit(fetchedInstruction[count], decodedEnd, tail);
+                        count++;
+                        // if there are dependancies, put it in the issue buffer
 			if (dependancies)
 			{
-				// registers are in use
-				// scan for an instuction to replace it
-				// then add the decoded instruciton to the buffer
-				// TODO: make sure it goes first, and everything else is delayed
 				dependancies = 0;
-				nextDecodedInstruction[scalar] = getIssueBuffer();
 				setIssueBuffer(tmp);
-			} else {
-		    	nextDecodedInstruction[scalar] = tmp;
-		    }
+			} else { // else add it to decoded
+                                nextDecodedInstruction[scalar] = tmp;
+                                scalar++;
+			}
 		} else {
 		    printf(" -");
+                    break;
 		}
-		scalar++;
 	}
+	
+	// possibility that there is still stuff to decode, decode it and add it to the issue buffer
+        while (count < NSCALAR)
+        {
+            if (fetchedInstruction[count])
+            {
+                //printf("bottom: count: %d, %s\n", count, fetchedInstruction[count]->instruction);
+                fflush(stdout);
+                tmp = decodeUnit(fetchedInstruction[count], decodedEnd, tail);
+                setIssueBuffer(tmp);
+            }
+            count++;
+        }
 	(DEBUG) ? testDecode() : NULL;
 }
 
@@ -138,9 +163,9 @@ void clearInstructionIssue(void)
 
 POP * getIssueBuffer (void)
 {
-	POP * tmp;
+	struct POP * tmp;
 
-	if (!issueBufferHead)
+	if ((!issueBufferHead) || !(issueBufferHead -> instructionForIssue))
 	{
 		tmp = malloc(sizeof(struct POP));
 		tmp -> opcode = "01111";
@@ -244,8 +269,11 @@ void init( char * argv[] )
 		BStemp -> address = instNum++;
 
 		strcpy(BStemp -> instruction, operand);
-		printf("%d:%s\n",BStemp->address, BStemp -> instruction);
-		BStemp -> next = NULL;
+                if (VERBOSE)
+                {
+                    printf("%d:%s\n",BStemp->address, BStemp -> instruction);
+                }
+                BStemp -> next = NULL;
 
 		BStail -> next = BStemp;
 

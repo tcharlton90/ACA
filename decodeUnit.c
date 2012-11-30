@@ -490,7 +490,10 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		tail->next = temp;
 
 		tail = temp;
-	}
+	} else {
+            printf("FAILED TO DECODE\n");
+            printf("%s\n", operand);
+        }
 	decodedInstruction = temp;
 
 	//printf("%s\n", name);
