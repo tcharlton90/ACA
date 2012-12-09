@@ -66,11 +66,12 @@ void decode(void)
                         // if there are dependancies, put it in the issue buffer
 			if (dependancies)
 			{
+				printf("found dependancies\n");
 				dependancies = 0;
 				setIssueBuffer(tmp);
 			} else { // else add it to decoded
-                                nextDecodedInstruction[scalar] = tmp;
-                                scalar++;
+                nextDecodedInstruction[scalar] = tmp;
+                scalar++;
 			}
 		} else {
 		    printf(" -");
@@ -130,7 +131,7 @@ void cycleClock (void)
     }
     registerBlock = nextRegisterBlock;
     clearPipeline();
-	testIssue();
+	(DEBUG) ? testIssue() : NULL;
 	fflush(stdout);
 	if(!finished)
 	{
@@ -165,35 +166,43 @@ POP * getIssueBuffer (void)
 {
 	struct POP * tmp;
 
-	if ((!issueBufferHead) || !(issueBufferHead -> instructionForIssue))
+	if (issueBufferHead -> next == NULL)
 	{
 		tmp = malloc(sizeof(struct POP));
 		tmp -> opcode = "01111";
-		//printf("given dummy ");
+		printf("\nEmptied Issue Buffer\n");
+		return tmp;
+	} else {
+		//printf("%s\n",issueBufferHead -> instructionForIssue->opcode);
+		printf("\nNot given Dummy\n");
+		tmp = issueBufferHead -> next -> instructionForIssue;
+		issueBufferHead -> next = issueBufferHead -> next -> next;
 		return tmp;
 	}
-	//printf("Not given Dummy");
-	tmp = issueBufferHead -> instructionForIssue;
-	issueBufferHead = issueBufferHead -> next;
-	return tmp;
 }
 
 void setIssueBuffer(POP * toAdd)
 {
 	struct issueBuffer * buf, * tmp;
 
-	//printf("---------------------------------%d\n", issueBufferHead -> i);
-	//fflush(stdout);
-
 	tmp = malloc(sizeof(struct issueBuffer));
+	tmp -> instructionForIssue = toAdd;
+	tmp -> next = NULL;
+
 	buf = issueBufferHead;
+
 	while (buf->next != NULL)
 	{
 		buf = buf -> next;
 	}
-	tmp -> instructionForIssue = toAdd;
-	tmp -> next = NULL;
 	buf -> next = tmp;
+	
+
+	//(DEBUG) ? printf("\nsetting issue buffer: %s\n", toAdd -> opcode) : NULL;
+	
+	//(DEBUG) ? printf("\nsetting issue buffer: %s\n", tmp -> instructionForIssue -> opcode) : NULL;
+
+	//(DEBUG) ? printf("\ntesting issue buffer setter: %s\n", buf -> next -> instructionForIssue -> opcode) : NULL;
 }
 
 void init( char * argv[] )
@@ -201,7 +210,7 @@ void init( char * argv[] )
 	char * operand = malloc(sizeof(char)*32);
 	int instNum = 1;	
 	struct bitStream *BStail;
-	struct issueBuffer *tmp;
+	//struct issueBuffer *tmp;
 
 	finished = 0;
 	fetchedAll = 0;
@@ -212,11 +221,11 @@ void init( char * argv[] )
 	NOPS = 0;
 
 	//start the issueBuffer
-	tmp = malloc(sizeof(struct issueBuffer));
+	//tmp = malloc(sizeof(struct issueBuffer));
 	issueBufferHead = malloc(sizeof(struct issueBuffer));
 	issueBufferHead -> instructionForIssue = malloc(sizeof(struct POP));
 	issueBufferHead -> instructionForIssue -> opcode = "01111";
-	issueBufferHead -> next = tmp;
+	issueBufferHead -> next = NULL;
 	//printf("%s, %s\n", issueBufferHead -> instructionForIssue -> opcode, issueBufferHead -> next);
 
 	if (argv[2])
@@ -322,12 +331,17 @@ void testIssue (void)
 {
 	struct issueBuffer * tmp;
 	tmp = issueBufferHead;
-	printf("\n");
+	printf("\n Testing Issue Buffer\n");
+
 	while (tmp -> next != NULL)
 	{
 		printf("%s\n", tmp -> instructionForIssue -> opcode);
+		fflush(stdout);
 		tmp = tmp -> next;
 	}
+	printf("%s\n", tmp -> instructionForIssue -> opcode);
+	fflush(stdout);
+
 }
 
 void testinit(void)
