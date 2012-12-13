@@ -38,7 +38,7 @@ int main (int argc, char *argv[])
 		printf("   ");
 		cycleClock();
 		//testinit();
-		//test();
+		(DEBUG) ? test() : NULL;
 	}
 	printf("\n");
 	return 0;

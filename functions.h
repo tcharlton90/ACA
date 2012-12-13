@@ -1,11 +1,12 @@
 #include "stdbool.h"
 
-#define NUMREGISTERS 32
+#define NUMREGISTERS 16
 #define MEMORYSIZE 4000
-#define SPEED 5000000 //speed is delay in ns
+#define SPEED 20000000 //speed is delay in ns
 #ifndef NSCALAR
     #define NSCALAR 4
 #endif
+
 void fetch(void);
 
 void decode(void);
@@ -28,13 +29,24 @@ void stats(void);
 
 void testFetch(void);
 
+void testDecode(void);
+
+void issue(void);
+
+void testIssue(void);
+
+void copyIssueBuffer(void);
+
+void checkDependancies(void);
+
+void dereference(void);
+
 typedef struct POP{
-	int instructionAddress;
-	char * opcode;
-	int reg1;
-	int op1;
-	int op2;
-	int Maddress;
+	int instructionAddress;		// def
+	char * opcode;				// def
+	int reg1;					// def
+	int op1;					// optional
+	int op2;					// optional
 	struct POP *next;
 } POP;
 
@@ -42,7 +54,6 @@ struct registers {
 		int PC;
 		int LR;
 		int reg[NUMREGISTERS];
-		int scoreBoard[NUMREGISTERS];
 		bool FLAG_E;
 		bool FLAG_LT;
 		bool FLAG_GT;
@@ -54,7 +65,19 @@ typedef struct bitStream{
 	struct bitStream *next;
 } bitStream;
 
+typedef struct issueBuffer{
+	struct POP * instructionForIssue;
+	int dependancies;
+	int decoded;
+	struct issueBuffer * next;
+} issueBuffer;
+
+POP * getIssueBuffer (void);
+
+void setIssueBuffer(POP * toAdd, int dep);
+
 struct bitStream *BShead , *BStemp, * fetchedInstruction[NSCALAR], * nextFetchedInstruction[NSCALAR];
-struct registers registerBlock;
-struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR];
-int finished, fetchedAll, memory[MEMORYSIZE], branchesTaken, predictedCorrect, predictedIncorrect, NOPS, DEBUG;
+struct registers *registerBlock, *nextRegisterBlock;
+struct POP * decodedInstruction[NSCALAR], * nextDecodedInstruction[NSCALAR], * issuedInstruction[NSCALAR], * nextIssuedInstruction[NSCALAR] ;
+int finished, fetchedAll, fetchedAllAddress, printedFs, memory[MEMORYSIZE], dependancies, branchesTaken, predictedCorrect, predictedIncorrect, scoreBoard[NUMREGISTERS], scoreBFlags, NOPS, DEBUG, VERBOSE;
+struct issueBuffer * issueBufferHead, * nextIssueBufferHead;

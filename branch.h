@@ -1,1 +1,1 @@
-int branchPredict(char * Maddress);
+int branchPredict(int reg);
