@@ -3,7 +3,11 @@ flags = -Wall
 output = out.o
 others = functions.c executeUnit.c decodeUnit.c branch.c fetchUnit.c
 
+<<<<<<< HEAD
 S=4
+=======
+S=2
+>>>>>>> e174c657f4e7eb0257ab07131af2704272d7b28b
 
 all:
 	$(CC) $(flags) Processor.c $(others) -o $(output) -DNSCALAR=$(S)
