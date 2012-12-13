@@ -10,9 +10,6 @@ void executeUnit ( POP *decodedInstruction )
 			j = decodedInstruction->reg1;
 			i = decodedInstruction->op1;
 			k = decodedInstruction->op2;
-			registerBlock -> scoreBoard[j] = 0;
-			registerBlock -> scoreBoard[i] = 0;
-			registerBlock -> scoreBoard[k] = 0;
 			nextRegisterBlock -> reg[j] = i + k;
 			//printf("ADD: %d, %d, %d\n", registerBlock -> reg[j], i, k);
 			break;
@@ -20,98 +17,81 @@ void executeUnit ( POP *decodedInstruction )
 			j = decodedInstruction->reg1;
 			i = decodedInstruction->op1;
 			k = decodedInstruction->op2;
-			registerBlock -> scoreBoard[j] = 0;
-			registerBlock -> scoreBoard[i] = 0;
-			registerBlock -> scoreBoard[k] = 0;
 			nextRegisterBlock -> reg[j] = i - k;
 			break;
 		case 10: //MUL
 			j = decodedInstruction->reg1;
 			i = decodedInstruction->op1;
 			k = decodedInstruction->op2;
-			registerBlock -> scoreBoard[j] = 0;
-			registerBlock -> scoreBoard[i] = 0;
-			registerBlock -> scoreBoard[k] = 0;
 			nextRegisterBlock -> reg[j] = i * k;
 			break;
 		case 11: //DIV
 			j = decodedInstruction->reg1;
 			i = decodedInstruction->op1;
 			k = decodedInstruction->op2;
-			registerBlock -> scoreBoard[j] = 0;
-			registerBlock -> scoreBoard[i] = 0;
-			registerBlock -> scoreBoard[k] = 0;
 			nextRegisterBlock -> reg[j] = i / k;
 			break;
 		case 100: //CMP
-			j = decodedInstruction->op1;
-			k = decodedInstruction->op2;
-			registerBlock -> scoreBoard[j] = 0;
-			registerBlock -> scoreBoard[k] = 0;
+			j = decodedInstruction->reg1;
+			k = decodedInstruction->op1;
 			//printf ("%d cmp %d\n",j,i);
 			if (j > k)
 			{
 				nextRegisterBlock -> FLAG_GT = true;
-				//printf("%d,%d\n",j , k);
+				//printf("\nCMP: %d, %d\n", j, k);
 			} else if ( j == k)
 			{
 				nextRegisterBlock -> FLAG_E = true;
-				//printf("%d,%d\n",j , k);
+				//printf("\nCMP: %d, %d\n", j, k);
 			} else if ( j < k)
 			{
 				nextRegisterBlock -> FLAG_LT = true;
-				//printf("%d,%d\n",j , k);
+				//printf("\nCMP: %d, %d\n", j, k);
 			}
 			break;
 		case 101: //MOV
 			//printf("moving %d to register %d\n", decodedInstruction->op1, decodedInstruction->reg1);
 			i = decodedInstruction->op1;
 			j = decodedInstruction->reg1;
-			registerBlock -> scoreBoard[j] = 0;
-			registerBlock -> scoreBoard[i] = 0;
 			nextRegisterBlock -> reg[j] = i;
 			break;
 		case 110: //LDR
 			i = decodedInstruction->reg1;
 			j = decodedInstruction->op1;
-			registerBlock -> scoreBoard[j] = 0;
-			registerBlock -> scoreBoard[i] = 0;
 			nextRegisterBlock -> reg[i] = memory[registerBlock -> reg[j]];
 			break;
 		case 111: //STR
 			i = decodedInstruction->reg1;
 			j = registerBlock -> reg[decodedInstruction->op1];
-			registerBlock -> scoreBoard[j] = 0;
-			registerBlock -> scoreBoard[i] = 0;
 			memory[j] = i;
 			break;
 		case 1000: //B
-			i = registerBlock -> reg[decodedInstruction->op1];
+			i = registerBlock -> reg[decodedInstruction->reg1];
 			nextRegisterBlock -> PC = i;
-			registerBlock -> scoreBoard[i] = 0;
 			clearPipeline();
 			//clearInstructionIssue();
 			//printf("%d\n",i);
 			break;
 		case 1001: //BLT
-			i = registerBlock -> reg[decodedInstruction->op1];
-			registerBlock -> scoreBoard[i] = 0;
+			i = decodedInstruction->reg1;
 			if (registerBlock -> FLAG_LT)
 			{
 				//registerBlock -> PC = i;
+				nextRegisterBlock -> PC = i;
 				nextRegisterBlock -> FLAG_LT = false;
-			} else {
-				//branch prediction got it wrong
 				clearPipeline();
 				clearInstructionIssue();
-				nextRegisterBlock -> PC = decodedInstruction->instructionAddress+1;
-				nextRegisterBlock -> FLAG_LT = false;
+			} else {
+				//branch prediction got it wrong
+				//clearPipeline();
+				//clearInstructionIssue();
+				//nextRegisterBlock -> PC = decodedInstruction->instructionAddress+1;
+				//nextRegisterBlock -> FLAG_LT = false;
 			}
 			//printf("%d\n",i);
 			break;
 		case 1010: //BE
-			i = registerBlock -> reg[decodedInstruction->op1];
-			registerBlock -> scoreBoard[i] = 0;
+			i = registerBlock -> reg[decodedInstruction->reg1];
 			if (registerBlock -> FLAG_E)
 			{
 				nextRegisterBlock -> PC = i;
@@ -121,8 +101,7 @@ void executeUnit ( POP *decodedInstruction )
 			//printf("%d\n",i);
 			break;
 		case 1011: //BGT
-			i = registerBlock -> reg[decodedInstruction->op1];
-			registerBlock -> scoreBoard[i] = 0;
+			i = registerBlock -> reg[decodedInstruction->reg1];
 			{
 				nextRegisterBlock -> PC = i;
 				nextRegisterBlock -> FLAG_GT = false;
@@ -137,6 +116,7 @@ void executeUnit ( POP *decodedInstruction )
 		case 1110: //END
 			printf("\n");
 			finished = 1;
+			test();
 			stats();
 			//test();
 			break;

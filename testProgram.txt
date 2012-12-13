@@ -1,13 +1,13 @@
 /* add all numbers up to 50, i.e. 1+2+3+4+...49+50;
 answer should be 1275 (10011111011) */
 
-		MOV r0 #0
-		MOV r1 #1
-		MOV r2 #1
+		MOV r0 #0					// total
+		MOV r1 #1 					// incrementor
+		MOV r2 #1 					// increment step
 		MOV r3 #51
-loop	ADD r0 r0 r1
+		MOV r4 .loop
+loop	ADD r0 r0 r1  
 		ADD r1 r1 r2
-		MOV //doesnt really matter
 		CMP r1 r3
-		BLT loop
+		BLT r4
 		END

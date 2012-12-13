@@ -20,7 +20,12 @@ bitStream * fetchUnit(void)
 
 	if (fetchedAll)
 	{
+		if (registerBlock -> PC < fetchedAllAddress)
+		{
+			fetchedAll = 0;
+		}
 		printf(" -");
+		printedFs++;
 		return NULL;
 	}
 
@@ -51,6 +56,7 @@ bitStream * fetchUnit(void)
 	if (success)
 	{
 		printf(" F");
+		printedFs++;
 		registerBlock -> PC++;
 	} else {
 		printf(" -");
@@ -60,6 +66,7 @@ bitStream * fetchUnit(void)
 	if (strncmp("01110", BStemp->instruction, 5) == 0)
 	{
 		fetchedAll = 1;
+		fetchedAllAddress = registerBlock -> PC;
 	}
 	return BStemp;
 }

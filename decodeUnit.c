@@ -27,15 +27,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		strncpy(fivebitop,operand+15,5);
 		opc = strtol(fivebitop, &endptr, 2);
 
-		if (registerBlock -> scoreBoard[opa] || registerBlock -> scoreBoard[opb] || registerBlock -> scoreBoard[opc] )
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-			registerBlock -> scoreBoard[opb] = 1;
-			registerBlock -> scoreBoard[opc] = 1;
-		}
-
 		temp -> opcode = "00000";
 
 		temp -> instructionAddress = instructionNumber;
@@ -68,15 +59,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		strncpy(fivebitop,operand+15,5);
 		opc = strtol(fivebitop, &endptr, 2);
-
-		if (registerBlock -> scoreBoard[opa] || registerBlock -> scoreBoard[opb] || registerBlock -> scoreBoard[opc] )
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-			registerBlock -> scoreBoard[opb] = 1;
-			registerBlock -> scoreBoard[opc] = 1;
-		}
 
 		temp -> opcode = "00001";
 
@@ -111,15 +93,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		strncpy(fivebitop,operand+15,5);
 		opc = strtol(fivebitop, &endptr, 2);
 
-		if (registerBlock -> scoreBoard[opa] || registerBlock -> scoreBoard[opb] || registerBlock -> scoreBoard[opc] )
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-			registerBlock -> scoreBoard[opb] = 1;
-			registerBlock -> scoreBoard[opc] = 1;
-		}
-
 		temp -> opcode = "00010";
 
 		temp -> instructionAddress = instructionNumber;
@@ -153,15 +126,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		strncpy(fivebitop,operand+15,5);
 		opc = strtol(fivebitop, &endptr, 2);
 
-		if (registerBlock -> scoreBoard[opa] || registerBlock -> scoreBoard[opb] || registerBlock -> scoreBoard[opc] )
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-			registerBlock -> scoreBoard[opb] = 1;
-			registerBlock -> scoreBoard[opc] = 1;
-		}
-
 		temp -> opcode = "00011";
 
 		temp -> instructionAddress = instructionNumber;
@@ -193,14 +157,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		strncpy(fivebitop,operand+10,5);
 		opb = strtol(fivebitop, &endptr, 2);
 
-		if (registerBlock -> scoreBoard[opa] || registerBlock -> scoreBoard[opb])
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-			registerBlock -> scoreBoard[opb] = 1;
-		}
-		
 		temp -> opcode = "00100";
 
 		temp -> instructionAddress = instructionNumber;
@@ -229,14 +185,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		strncpy(twotwobitop,operand+10,22);
 		opb = strtol(twotwobitop, &endptr, 2);
-
-		if (registerBlock -> scoreBoard[opa] || registerBlock -> scoreBoard[opb])
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-			registerBlock -> scoreBoard[opb] = 1;
-		}
 
 		temp -> opcode = "00101";
 
@@ -268,14 +216,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		strncpy(fivebitop, operand+ 10,5);
 		opb = strtol(fivebitop, &endptr, 2);
 
-		if (registerBlock -> scoreBoard[opa] || registerBlock -> scoreBoard[opb])
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-			registerBlock -> scoreBoard[opb] = 1;
-		}
-
 		temp -> opcode = "00110";
 
 		temp -> instructionAddress = instructionNumber;
@@ -302,14 +242,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		strncpy(fivebitop, operand+ 10,5);
 		opb = strtol(fivebitop, &endptr, 2);
 
-		if (registerBlock -> scoreBoard[opa] || registerBlock -> scoreBoard[opb])
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-			registerBlock -> scoreBoard[opb] = 1;
-		}
-
 		temp -> opcode = "00111";
 
 		temp -> instructionAddress = instructionNumber;
@@ -332,13 +264,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		strncpy(fivebitop, operand+5, 5);
 		opa = strtol(fivebitop, &endptr, 2);
-
-		if (registerBlock -> scoreBoard[opa])
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-		}
 
 		temp -> opcode = "01000";
 
@@ -364,13 +289,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		strncpy(fivebitop, operand+5, 5);
 		opa = strtol(fivebitop, &endptr, 2);
 
-		if (registerBlock -> scoreBoard[opa])
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-		}
-
 		temp -> opcode = "01001";
 
 		temp -> instructionAddress = instructionNumber;
@@ -395,13 +313,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 		strncpy(fivebitop, operand+5, 5);
 		opa = strtol(fivebitop, &endptr, 2);
 
-		if (registerBlock -> scoreBoard[opa])
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-		}
-
 		temp -> opcode = "01010";
 
 		temp -> instructionAddress = instructionNumber;
@@ -425,13 +336,6 @@ POP * decodeUnit (bitStream * fetchedInstruction, int decodedEnd, POP *tail)
 
 		strncpy(fivebitop, operand+5, 5);
 		opa = strtol(fivebitop, &endptr, 2);
-
-		if (registerBlock -> scoreBoard[opa])
-		{
-			dependancies = 1;
-		} else {
-			registerBlock -> scoreBoard[opa] = 1;
-		}
 
 		temp -> opcode = "01011";
 
