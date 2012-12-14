@@ -1,0 +1,21 @@
+0000	ADD dest reg1 reg2
+0001	SUB dest reg1 reg2
+0010	MUL dest reg1 reg2
+0011	DIV dest reg1 reg2
+0100	CMP reg1 #1
+0101	MOV reg1 #1
+0110	LDR reg1 reg2
+0111	STR reg1 reg2
+1000	B dest
+1001	BLT dest
+1010	BE dest
+1011	BGT dest
+1100	JMP dest
+1101	RTN
+1110	END
+
+
+REGISTERS
+	- dest reg1 reg2
+CONSTANTS
+	- #1 #2

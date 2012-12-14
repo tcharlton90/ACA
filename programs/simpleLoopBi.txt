@@ -1,0 +1,22 @@
+mov r0, #0
+mov r1, #1
+mov r2, #1
+mov r3, #51
+loop: add r0, r0, r1
+add r7, r7, r7
+add r8, r8, r8
+add r9, r9, r9
+add r14, r14, r14
+add r1, r1, r2
+cmp r1, r3
+sub r10, r10, r10
+sub r11, r11, r11
+add r7, r7, r7
+add r8, r8, r8
+add r9, r9, r9
+add r14, r14, r14
+blti .loop
+add r7, r7, r7
+add r8, r8, r8
+add r9, r9, r9
+end
